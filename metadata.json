@@ -1,0 +1,6 @@
+{
+  "name": "The Polytechnic, Ibadan Academic FAQ Chatbot",
+  "description": "AI-powered Academic Advisor and Student FAQ Assistant for The Polytechnic, Ibadan (ND & HND, Faculties, Admissions, Course Reg, Grading, SIWES, and Campus Services).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
