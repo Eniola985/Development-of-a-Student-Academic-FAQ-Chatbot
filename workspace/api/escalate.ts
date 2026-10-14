@@ -49,6 +49,7 @@ export default async function handler(req: any, res: any) {
 
     const ticketId = `TPI-ADV-${Math.floor(10000 + Math.random() * 90000)}`;
     let assignedOffice = 'Directorate of Student Affairs (DSA)';
+
     if (category === 'Result / Grade Issue' || category === 'Carryover / Transcript') {
       assignedOffice = 'Departmental Examination Officer & Sub-Dean';
     } else if (category === 'Portal / Registration Bug') {

@@ -38,6 +38,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const { message, studentProfile, history } = body;
+
     if (!message) {
       const fallbackResult = queryOfflinePolyKnowledge('Hello', studentProfile);
       res.status(200).json(fallbackResult);
