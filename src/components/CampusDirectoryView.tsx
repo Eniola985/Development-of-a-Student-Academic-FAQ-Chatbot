@@ -7,34 +7,94 @@ import {
   Compass, 
   School, 
   CheckCircle2,
-  PhoneCall
+  Navigation,
+  Search,
+  Bus,
+  Footprints,
+  Home,
+  ShieldAlert,
+  ArrowRight
 } from 'lucide-react';
 import { INSTITUTION_INFO, FACULTIES, CAMPUS_OFFICES } from '../data/polyIbadanData';
 
+const CAMPUS_HOSTELS = [
+  {
+    name: 'Unity Hall',
+    location: 'North Campus (near Sports Pavilion)',
+    gender: 'Male Students (ND & HND)',
+    features: 'Study rooms, cafeteria, proximity to Science & Engineering faculties'
+  },
+  {
+    name: 'Ramat Hall',
+    location: 'South Campus (near Apete Gate)',
+    gender: 'Female Students (ND & HND)',
+    features: 'High security perimeter, common room, close to FBCS and FFMS'
+  },
+  {
+    name: 'Olori Hall',
+    location: 'North Campus residential perimeter',
+    gender: 'Female Freshers & Finalists',
+    features: 'Quiet study environment, water points, power backup'
+  }
+];
+
 export const CampusDirectoryView: React.FC = () => {
   const [selectedCampus, setSelectedCampus] = useState<'All' | 'North Campus' | 'South Campus' | 'Middle Campus'>('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredOffices = CAMPUS_OFFICES.filter(office => {
-    if (selectedCampus === 'All') return true;
-    return office.location.toLowerCase().includes(selectedCampus.toLowerCase().replace(' campus', ''));
+    const matchesCampus = selectedCampus === 'All' || office.location.toLowerCase().includes(selectedCampus.toLowerCase().replace(' campus', ''));
+    const matchesSearch = !searchQuery.trim() || 
+      office.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      office.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      office.location.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCampus && matchesSearch;
+  });
+
+  const filteredFaculties = FACULTIES.filter(fac => {
+    const matchesCampus = selectedCampus === 'All' || fac.campus.toLowerCase().includes(selectedCampus.toLowerCase());
+    const matchesSearch = !searchQuery.trim() ||
+      fac.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      fac.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      fac.departments.some(d => d.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCampus && matchesSearch;
   });
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      {/* Intro Header */}
-      <div className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs">
-        <div className="flex items-center gap-2.5 mb-1.5">
-          <Building2 className="w-5 h-5 text-[#3D2317]" />
-          <h2 className="text-lg font-bold text-[#2C180E] font-serif">
-            Campus Guide &amp; Directorate Directory
-          </h2>
-        </div>
-        <p className="text-xs text-[#5D4037] leading-relaxed">
-          The Polytechnic, Ibadan operates across distinct campus zones located along Sango-Eleyele Road, Ibadan, Oyo State.
-        </p>
+    <div className="max-w-5xl mx-auto space-y-6 pb-12">
+      {/* Intro Header & Search */}
+      <div className="bg-white border border-[#E5DDD3] rounded-2xl p-6 shadow-xs space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2.5 mb-1.5">
+              <Building2 className="w-6 h-6 text-[#3D2317]" />
+              <h2 className="text-xl font-bold text-[#2C180E] font-serif">
+                Interactive Poly Ibadan Campus Navigator &amp; Directory
+              </h2>
+            </div>
+            <p className="text-xs text-[#5D4037] leading-relaxed max-w-2xl">
+              Wayfinding guide for faculties, administrative directorates, student hostels, and transit routes between North Campus, Middle Campus, and South Campus along the Sango-Eleyele corridor.
+            </p>
+          </div>
 
-        {/* Campus Filter */}
-        <div className="mt-4 flex items-center gap-1.5 overflow-x-auto text-xs">
+          {/* Search Box */}
+          <div className="relative w-full md:w-72">
+            <Search className="w-4 h-4 text-[#8D6E63] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search faculty, office, clinic..."
+              className="w-full pl-9 pr-3 py-2 bg-[#FAF7F2] border border-[#E5DDD3] rounded-xl text-xs text-[#2C180E] placeholder-[#8D6E63] focus:outline-none focus:ring-2 focus:ring-[#3D2317]"
+            />
+          </div>
+        </div>
+
+        {/* Campus Filter Buttons */}
+        <div className="flex items-center gap-1.5 overflow-x-auto text-xs pt-1 border-t border-[#F0EAE1]">
+          <span className="text-[11px] font-bold text-[#6D4C41] uppercase tracking-wider mr-1">
+            Zone:
+          </span>
           {(['All', 'North Campus', 'South Campus', 'Middle Campus'] as const).map(camp => (
             <button
               key={camp}
@@ -51,30 +111,114 @@ export const CampusDirectoryView: React.FC = () => {
         </div>
       </div>
 
+      {/* Transit Navigator: North Campus ↔ South Campus */}
+      <div className="bg-white border-2 border-[#C69C6D]/40 rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="flex items-center gap-2.5 text-[#3D2317]">
+          <Navigation className="w-5 h-5 text-[#C69C6D]" />
+          <h3 className="font-serif font-bold text-base text-[#2C180E]">
+            How to Transit Between North Campus &amp; South Campus
+          </h3>
+        </div>
+        <p className="text-xs text-[#5D4037] leading-relaxed">
+          The Polytechnic, Ibadan has two primary academic complexes connected via Middle Campus. Follow these options for quick and safe commuting between lectures:
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+          {/* Option 1: Campus Shuttle */}
+          <div className="bg-[#FAF7F2] border border-[#E5DDD3] rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#3D2317]">
+              <Bus className="w-4 h-4 text-[#C69C6D]" />
+              <span>Campus Shuttle Bus</span>
+            </div>
+            <p className="text-xs text-[#5D4037] leading-relaxed">
+              Board at <strong>North Campus Central Park</strong> (by Faculty of Engineering) or <strong>South Campus Park</strong> (by FBCS). 
+            </p>
+            <div className="text-[11px] font-bold text-[#8D6E63] pt-1">
+              • Fare: ~₦100 · Duration: 5–7 mins
+            </div>
+          </div>
+
+          {/* Option 2: Tricycle (Keke Napep) */}
+          <div className="bg-[#FAF7F2] border border-[#E5DDD3] rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#3D2317]">
+              <Compass className="w-4 h-4 text-[#C69C6D]" />
+              <span>Intra-Campus Tricycles</span>
+            </div>
+            <p className="text-xs text-[#5D4037] leading-relaxed">
+              Operate continuously connecting <strong>Main Sango Gate</strong>, Middle Campus (Central Library / Poly Clinic), and South Campus (Apete Gate).
+            </p>
+            <div className="text-[11px] font-bold text-[#8D6E63] pt-1">
+              • Continuous boarding along main route
+            </div>
+          </div>
+
+          {/* Option 3: Walking Route */}
+          <div className="bg-[#FAF7F2] border border-[#E5DDD3] rounded-xl p-4 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#3D2317]">
+              <Footprints className="w-4 h-4 text-[#C69C6D]" />
+              <span>Pedestrian Paved Walkway</span>
+            </div>
+            <p className="text-xs text-[#5D4037] leading-relaxed">
+              A scenic 10–12 minute walk via Middle Campus past the Central Administrative block, Poly Clinic, and Central Library.
+            </p>
+            <div className="text-[11px] font-bold text-[#8D6E63] pt-1">
+              • Safe, shaded student sidewalks
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Campus Zones Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {INSTITUTION_INFO.campuses.map((camp, idx) => (
-          <div key={idx} className="bg-white border border-[#E5DDD3] rounded-2xl p-4 shadow-xs space-y-2">
+          <div key={idx} className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs space-y-2">
             <div className="flex items-center gap-2 text-[#3D2317] font-bold text-sm">
               <Compass className="w-4 h-4 text-[#C69C6D]" />
               <span>{camp.name}</span>
             </div>
             <div className="text-xs text-[#6D4C41] flex items-center gap-1 font-medium">
-              <MapPin className="w-3 h-3 text-[#A1887F]" />
+              <MapPin className="w-3.5 h-3.5 text-[#A1887F]" />
               <span>{camp.location}</span>
             </div>
-            <p className="text-xs text-[#5D4037] leading-relaxed pt-1.5 border-t border-[#F0EAE1]">
+            <p className="text-xs text-[#5D4037] leading-relaxed pt-2 border-t border-[#F0EAE1]">
               {camp.housing}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Campus Directorates & Service Offices */}
+      {/* Student Hostels */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-bold text-[#3D2317] flex items-center gap-2">
+          <Home className="w-4 h-4 text-[#4A2E1B]" />
+          Student Halls of Residence (Hostels)
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {CAMPUS_HOSTELS.map((hostel, idx) => (
+            <div key={idx} className="bg-white border border-[#E5DDD3] rounded-2xl p-4 shadow-xs space-y-2">
+              <div className="flex items-start justify-between">
+                <h4 className="font-bold text-sm text-[#2C180E]">{hostel.name}</h4>
+                <span className="text-[10px] font-bold text-[#3D2317] bg-[#FAF7F2] px-2 py-0.5 rounded border border-[#E5DDD3]">
+                  {hostel.gender}
+                </span>
+              </div>
+              <div className="flex items-center gap-1 text-xs text-[#6D4C41]">
+                <MapPin className="w-3 h-3 text-[#A1887F]" />
+                <span>{hostel.location}</span>
+              </div>
+              <p className="text-xs text-[#5D4037] leading-relaxed pt-1.5 border-t border-[#F0EAE1]">
+                {hostel.features}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Key Administrative & Service Offices */}
       <div className="space-y-3">
         <h3 className="text-sm font-bold text-[#3D2317] flex items-center gap-2">
           <School className="w-4 h-4 text-[#4A2E1B]" />
-          Key Administrative &amp; Student Service Units
+          Key Administrative &amp; Student Service Units ({filteredOffices.length})
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -86,16 +230,13 @@ export const CampusDirectoryView: React.FC = () => {
               <h4 className="font-bold text-sm text-[#2C180E]">
                 {office.name}
               </h4>
-
               <div className="flex items-center gap-1.5 text-xs text-[#4A2E1B] font-bold">
                 <MapPin className="w-3.5 h-3.5 text-[#C69C6D] shrink-0" />
                 <span>{office.location}</span>
               </div>
-
               <p className="text-xs text-[#5D4037] leading-relaxed">
                 {office.role}
               </p>
-
               <div className="pt-2 border-t border-[#F0EAE1] flex items-center gap-1.5 text-[11px] text-[#8D6E63]">
                 <Clock className="w-3 h-3 text-[#A1887F]" />
                 <span>{office.hours}</span>
@@ -109,11 +250,11 @@ export const CampusDirectoryView: React.FC = () => {
       <div className="space-y-3 pt-2">
         <h3 className="text-sm font-bold text-[#3D2317] flex items-center gap-2">
           <School className="w-4 h-4 text-[#4A2E1B]" />
-          Academic Faculties &amp; Departments
+          Academic Faculties &amp; Departments ({filteredFaculties.length})
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {FACULTIES.map((fac) => (
+          {filteredFaculties.map((fac) => (
             <div key={fac.code} className="bg-white border border-[#E5DDD3] rounded-2xl p-4 shadow-xs space-y-2.5">
               <div className="flex items-start justify-between">
                 <div>

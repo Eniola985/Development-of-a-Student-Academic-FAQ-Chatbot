@@ -111,8 +111,8 @@ export async function handlePolyAdvisorQuery({
 
   const ai = getGeminiClient();
 
-  // Multi-model list: gemini-3.1-flash-lite is high throughput and fast, with fallbacks
-  const CANDIDATE_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
+  // Multi-model list: gemini-3.8-flash is the active generation model
+  const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-flash-latest'];
 
   if (ai) {
     const systemInstruction = buildSystemInstruction(studentProfile);
@@ -126,7 +126,10 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
 
     for (const model of CANDIDATE_MODELS) {
       try {
-        const response = await ai.models.generateContent({
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('AI generation timed out')), 3500)
+        );
+        const apiCallPromise = ai.models.generateContent({
           model,
           contents: prompt,
           config: {
@@ -134,6 +137,7 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
             temperature: 0.7,
           },
         });
+        const response: any = await Promise.race([apiCallPromise, timeoutPromise]);
 
         if (response.text && response.text.trim()) {
           const replyText = response.text.trim();
@@ -231,6 +235,20 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
         'Where is the Faculty of Science located?',
         'What documents are needed for course clearance?',
         'How do I secure hostel accommodation?'
+      ],
+      requiresAdvisingEscalation,
+    };
+  }
+
+  // Check transit between North and South Campus
+  if (lower.includes('transit') || lower.includes('shuttle') || (lower.includes('north') && lower.includes('south')) || lower.includes('bus') || lower.includes('keke') || lower.includes('move between')) {
+    return {
+      reply: `**Transiting Between North Campus and South Campus**\n\nThe Polytechnic, Ibadan operates across two main campus zones situated along the Sango-Eleyele corridor:\n\n1. **Campus Shuttle Buses:** Board licensed internal campus shuttles at the North Campus Central Park (near Faculty of Engineering) or South Campus Park (near FBCS). Fare is nominal (₦100 - ₦150).\n2. **Keke Napep (Tricycles):** Constant intra-campus tricycles operate between the Main Sango Gate, Middle Campus (Library/DSA/Clinic), and South Campus (Apete Gate axis).\n3. **Walking Route:** Approximately 10–12 minutes brisk walk along designated pedestrian walkways past the Central Administrative Complex and Poly Clinic.\n\n*Important:* Always carry your Student ID card when crossing between campus sectors during examinations.`,
+      citations: ['Poly Ibadan Directorate of Student Affairs Transit Guidelines'],
+      suggestedFollowUps: [
+        'Where is the Faculty of Science located?',
+        'Where is the Poly Clinic located?',
+        'How do I register courses on the student portal?'
       ],
       requiresAdvisingEscalation,
     };

@@ -8,11 +8,24 @@
     <meta property="og:title" content="The Polytechnic, Ibadan - Student Academic FAQ Chatbot" />
     <meta property="og:description" content="AI-powered Academic Advisor and Student FAQ Assistant for The Polytechnic, Ibadan (ND &amp; HND, Faculties, Admissions, Course Reg, Grading, SIWES, and Campus Services)." />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#3D2317" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="PolyIbadan AI" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.log('SW registration skipped or unsupported:', err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>
 

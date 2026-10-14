@@ -9,7 +9,8 @@ import {
   CheckCircle2, 
   Info, 
   Sparkles,
-  BookOpen
+  BookOpen,
+  Printer
 } from 'lucide-react';
 import { CourseEntry } from '../types';
 import { NBTE_GRADING_SCALE, GRADUATION_CLASSIFICATIONS } from '../data/polyIbadanData';
@@ -71,6 +72,10 @@ export const CGPACalculator: React.FC = () => {
     setPrevQualityPoints(0);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const currentTotalUnits = courses.reduce((sum, c) => sum + Number(c.units || 0), 0);
   const currentQualityPoints = courses.reduce((sum, c) => {
     const point = GRADE_POINTS[c.grade] ?? 0;
@@ -110,7 +115,7 @@ export const CGPACalculator: React.FC = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 pb-12">
       {/* Title & Info Banner */}
       <div className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs">
         <div className="flex items-center justify-between flex-wrap gap-3">
@@ -120,13 +125,23 @@ export const CGPACalculator: React.FC = () => {
               NBTE 4.0 Grading &amp; CGPA Calculator
             </h2>
           </div>
-          <button
-            onClick={resetCourses}
-            className="text-xs text-[#5D4037] hover:text-[#2C180E] flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FAF7F2] hover:bg-[#EFE8DE] border border-[#E5DDD3] transition-colors cursor-pointer font-medium"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Reset to Sample Courses
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrint}
+              className="text-xs text-white bg-[#3D2317] hover:bg-[#2A160D] flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer font-bold shadow-xs"
+              title="Print or Save PDF of your CGPA Calculation"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Official Slip</span>
+            </button>
+            <button
+              onClick={resetCourses}
+              className="text-xs text-[#5D4037] hover:text-[#2C180E] flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FAF7F2] hover:bg-[#EFE8DE] border border-[#E5DDD3] transition-colors cursor-pointer font-medium"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset</span>
+            </button>
+          </div>
         </div>
         <p className="text-xs text-[#5D4037] mt-1.5 leading-relaxed">
           Standardized for The Polytechnic, Ibadan using the National Board for Technical Education (NBTE) 9-point grading scale (A, AB, B, BC, C, CD, D, E, F).

@@ -6,16 +6,19 @@ import {
   Calculator, 
   Calendar, 
   Building2, 
+  CheckSquare,
   LifeBuoy, 
   User, 
-  Edit3 
+  Edit3,
+  Download,
+  Smartphone
 } from 'lucide-react';
 import { StudentProfile } from '../types';
 import { PolyIbadanLogo } from './PolyIbadanLogo';
 
 interface HeaderProps {
-  activeTab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'escalate';
-  setActiveTab: (tab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'escalate') => void;
+  activeTab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'checklist' | 'escalate';
+  setActiveTab: (tab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'checklist' | 'escalate') => void;
   studentProfile: StudentProfile;
   onOpenProfileModal: () => void;
 }
@@ -26,6 +29,39 @@ export const Header: React.FC<HeaderProps> = ({
   studentProfile,
   onOpenProfileModal
 }) => {
+  const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
+  const [isInstalled, setIsInstalled] = React.useState(false);
+  const [showInstallHelp, setShowInstallHelp] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleBeforeInstall = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    });
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
+      setDeferredPrompt(null);
+    } else {
+      setShowInstallHelp(true);
+      setTimeout(() => setShowInstallHelp(false), 5000);
+    }
+  };
+
   return (
     <header className="bg-[#3D2317] text-white shadow-md border-b border-[#543322] sticky top-0 z-40">
       {/* Top Banner with Institution Identity */}
@@ -52,25 +88,48 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Student Persona Box */}
-          <div className="flex items-center gap-2 bg-[#513121] px-3.5 py-1.5 rounded-lg border border-[#68412D] text-xs">
-            <User className="w-4 h-4 text-[#D7CCC8] shrink-0" />
-            <div className="flex flex-col text-left leading-tight">
-              <span className="font-semibold text-white truncate max-w-[170px] sm:max-w-xs">
-                {studentProfile.name} ({studentProfile.level})
-              </span>
-              <span className="text-[11px] text-[#D7CCC8] truncate max-w-[170px] sm:max-w-xs">
-                {studentProfile.department} · {studentProfile.program}
-              </span>
+          {/* Action Area: PWA Install & Student Persona */}
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {/* PWA Install Button */}
+            {!isInstalled && (
+              <div className="relative">
+                <button
+                  onClick={handleInstallClick}
+                  className="px-3 py-1.5 bg-[#C69C6D] hover:bg-[#b58b5c] text-[#2C180E] font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                  title="Install app to your home screen for fast offline access"
+                >
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>Install App</span>
+                </button>
+                {showInstallHelp && (
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white text-[#2C180E] p-2.5 rounded-lg shadow-lg border border-[#E5DDD3] text-[11px] z-50">
+                    <p className="font-semibold mb-0.5">To Install App:</p>
+                    <p>Tap your browser's share or menu button (⋮ / ⎋) and select <strong>"Add to Home Screen"</strong>.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Student Persona Box */}
+            <div className="flex items-center gap-2 bg-[#513121] px-3.5 py-1.5 rounded-lg border border-[#68412D] text-xs">
+              <User className="w-4 h-4 text-[#D7CCC8] shrink-0" />
+              <div className="flex flex-col text-left leading-tight">
+                <span className="font-semibold text-white truncate max-w-[170px] sm:max-w-xs">
+                  {studentProfile.name} ({studentProfile.level})
+                </span>
+                <span className="text-[11px] text-[#D7CCC8] truncate max-w-[170px] sm:max-w-xs">
+                  {studentProfile.department} · {studentProfile.program}
+                </span>
+              </div>
+              <button
+                onClick={onOpenProfileModal}
+                className="ml-2 px-2.5 py-1 bg-white hover:bg-[#FAF7F2] text-[#3D2317] font-bold rounded text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-xs"
+                title="Change your department or level"
+              >
+                <Edit3 className="w-3 h-3" />
+                <span>Change</span>
+              </button>
             </div>
-            <button
-              onClick={onOpenProfileModal}
-              className="ml-2 px-2.5 py-1 bg-white hover:bg-[#FAF7F2] text-[#3D2317] font-bold rounded text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-xs"
-              title="Change your department or level"
-            >
-              <Edit3 className="w-3 h-3" />
-              <span>Change</span>
-            </button>
           </div>
         </div>
 
@@ -110,6 +169,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <BookOpen className="w-4 h-4" />
             <span>Verified FAQs</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('checklist')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
+              activeTab === 'checklist'
+                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
+                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
+            }`}
+          >
+            <CheckSquare className="w-4 h-4" />
+            <span>Course Clearance Checklist</span>
           </button>
 
           <button

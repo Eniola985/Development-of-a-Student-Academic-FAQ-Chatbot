@@ -10,7 +10,8 @@ import {
   Building,
   User,
   School,
-  X
+  X,
+  Printer
 } from 'lucide-react';
 import { StudentProfile, EscalationTicket } from '../types';
 import { PolyIbadanLogo } from './PolyIbadanLogo';
@@ -182,17 +183,27 @@ Status: ${createdTicket.status}`;
 
             {/* Actions */}
             <div className="flex justify-between items-center pt-2 flex-wrap gap-2">
-              <button
-                onClick={handleCopyTicket}
-                className="px-4 py-2 bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#3D2317] font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors cursor-pointer border border-[#D7CCC8]"
-              >
-                {copied ? <Check className="w-4 h-4 text-[#3D2317]" /> : <Copy className="w-4 h-4" />}
-                {copied ? 'Referral Slip Copied' : 'Copy Referral Docket'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyTicket}
+                  className="px-4 py-2 bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#3D2317] font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors cursor-pointer border border-[#D7CCC8]"
+                >
+                  {copied ? <Check className="w-4 h-4 text-[#3D2317]" /> : <Copy className="w-4 h-4" />}
+                  {copied ? 'Slip Copied' : 'Copy Ticket'}
+                </button>
+
+                <button
+                  onClick={() => window.print()}
+                  className="px-4 py-2 bg-[#3D2317] hover:bg-[#2A160D] text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print Official Slip</span>
+                </button>
+              </div>
 
               <button
                 onClick={handleReset}
-                className="px-4 py-2 bg-[#3D2317] hover:bg-[#2A160D] text-white font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-xs"
+                className="px-4 py-2 bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#5D4037] font-bold rounded-xl text-xs transition-colors cursor-pointer border border-[#E5DDD3]"
               >
                 Submit Another Request
               </button>
