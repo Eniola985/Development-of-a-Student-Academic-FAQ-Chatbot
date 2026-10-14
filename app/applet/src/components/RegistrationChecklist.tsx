@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   CheckSquare, 
   Square, 
@@ -15,298 +15,246 @@ import {
 } from 'lucide-react';
 import { StudentProfile } from '../types';
 
-interface RegistrationChecklistProps {
-  studentProfile: StudentProfile;
-  onOpenEscalate: (subject: string) => void;
-}
-
 interface ChecklistItem {
   id: string;
-  category: string;
+  category: 'Freshers' | 'Returning' | 'All';
   title: string;
   description: string;
-  policy: string;
-  isMandatory: boolean;
+  department: string;
+  mandatory: boolean;
 }
 
 const CHECKLIST_ITEMS: ChecklistItem[] = [
   {
-    id: 'remita-fees',
-    category: 'Financial Clearance',
-    title: 'School Fees Payment & Remita RRR Generation',
-    description: 'Generate your official Remita Retrieval Reference (RRR) via portal.polyibadan.edu.ng and pay at designated commercial banks or online via debit card.',
-    policy: 'Bursary Department Financial Directives',
-    isMandatory: true,
+    id: 'remita',
+    category: 'All',
+    title: 'School Fees Remita RRR Validation & Payment',
+    description: 'Generate RRR via student portal, pay through approved commercial banks or online gateway, and obtain official receipt.',
+    department: 'Bursary & ICT Centre',
+    mandatory: true
   },
   {
-    id: 'tiship-medical',
-    category: 'Medical Screening',
-    title: 'Poly Clinic Medical Screening (TISHIP)',
-    description: 'Undergo mandatory medical tests (Chest X-ray, Genotype, Blood Group, Urinalysis) at the Poly Clinic (Middle Campus) and obtain your TISHIP medical card.',
-    policy: 'Polytechnic Health Services Directorate',
-    isMandatory: true,
+    id: 'tiship',
+    category: 'Freshers',
+    title: 'Medical Screening & TISHIP Registration',
+    description: 'Complete medical examination at the Poly Clinic and register for Tertiary Institutions Students Health Insurance Programme.',
+    department: 'Poly Clinic (North Campus)',
+    mandatory: true
   },
   {
-    id: 'credit-load',
-    category: 'Academic Registration',
-    title: 'Credit Unit Load Validation (Min 18 - Max 24)',
-    description: 'Select approved departmental courses ensuring total credit units are between 18 (minimum) and 24 (maximum) units for the semester.',
-    policy: 'NBTE & Academic Board Guidelines',
-    isMandatory: true,
+    id: 'dept_clearance',
+    category: 'Freshers',
+    title: 'O\'Level Verification & Departmental Clearance',
+    description: 'Present original WAEC/NECO certificates, birth certificate, and admission letter to the Departmental Admissions Officer.',
+    department: 'Department / Academic Office',
+    mandatory: true
   },
   {
-    id: 'print-forms',
-    category: 'Documentation',
+    id: 'course_reg',
+    category: 'All',
+    title: 'Online Course Registration (Min 18 - Max 24 Units)',
+    description: 'Select carryovers first, then current semester core and elective courses. Ensure total credit load is between 18 and 24 units.',
+    department: 'MIS / ICT Centre',
+    mandatory: true
+  },
+  {
+    id: 'four_copies',
+    category: 'All',
     title: 'Print 4 Colored Copies of Course Form',
-    description: 'After online course registration approval, print four (4) colored copies of your course registration slip for physical endorsement.',
-    policy: 'Academic Affairs Directorate',
-    isMandatory: true,
+    description: 'Print 4 official colored copies of the registered course form for signing and distribution.',
+    department: 'ICT Centre / Cybercafe',
+    mandatory: true
   },
   {
-    id: 'signatures',
-    category: 'Physical Clearance',
-    title: 'Physical Signatures & Endorsement (Advisor -> HOD -> Faculty)',
-    description: 'Endorse your printed course forms sequentially with your Course Advisor, Head of Department (HOD), and Faculty Officer.',
-    policy: 'Departmental Academic Regulations',
-    isMandatory: true,
+    id: 'advisor_sign',
+    category: 'All',
+    title: 'Course Advisor Signature & Approval',
+    description: 'Submit course form to your designated Level/Course Advisor for credit unit validation and signature.',
+    department: 'Departmental Office',
+    mandatory: true
   },
   {
-    id: 'exam-docket',
-    category: 'Examination Eligibility',
-    title: 'Exam Docket Generation & Bursary Stamping',
-    description: 'Print your photocard examination docket and ensure fee validation stamp is obtained from Bursary before examination week.',
-    policy: 'Chief Examiner & Academic Board Bylaws',
-    isMandatory: true,
+    id: 'hod_sign',
+    category: 'All',
+    title: 'Head of Department (HOD) Counter-Sign',
+    description: 'Get HOD approval and signature on all 4 copies of the course form.',
+    department: 'Head of Department',
+    mandatory: true
+  },
+  {
+    id: 'faculty_sign',
+    category: 'All',
+    title: 'Faculty Officer Endorsement',
+    description: 'Submit course forms for faculty records stamp and final endorsement.',
+    department: 'Faculty Officer',
+    mandatory: true
+  },
+  {
+    id: 'exam_docket',
+    category: 'All',
+    title: 'Examination Docket Stamping & Clearance',
+    description: 'Print examination docket, attach passport, and stamp at the Bursary and Department before CBT/semester exams.',
+    department: 'Bursary & Department',
+    mandatory: true
   }
 ];
+
+interface RegistrationChecklistProps {
+  studentProfile?: StudentProfile;
+  onOpenEscalate?: (prefill?: string) => void;
+}
 
 export const RegistrationChecklist: React.FC<RegistrationChecklistProps> = ({
   studentProfile,
   onOpenEscalate
 }) => {
   const [completedItems, setCompletedItems] = useState<Record<string, boolean>>(() => {
-    try {
-      const saved = localStorage.getItem('poly_registration_checklist');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {
-      console.error(e);
-    }
-    return {
-      'remita-fees': true, // default some checked for demonstration
-      'tiship-medical': false,
-      'credit-load': true,
-      'print-forms': false,
-      'signatures': false,
-      'exam-docket': false,
-    };
+    const saved = localStorage.getItem('poly_clearance_checklist');
+    return saved ? JSON.parse(saved) : {};
   });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('poly_registration_checklist', JSON.stringify(completedItems));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [completedItems]);
+  const [filter, setFilter] = useState<'All' | 'Freshers' | 'Returning'>('All');
 
   const toggleItem = (id: string) => {
-    setCompletedItems(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    const updated = { ...completedItems, [id]: !completedItems[id] };
+    setCompletedItems(updated);
+    localStorage.setItem('poly_clearance_checklist', JSON.stringify(updated));
   };
 
-  const totalItems = CHECKLIST_ITEMS.length;
-  const completedCount = Object.values(completedItems).filter(Boolean).length;
-  const progressPercent = Math.round((completedCount / totalItems) * 100);
+  const filteredItems = CHECKLIST_ITEMS.filter(item => {
+    if (filter === 'All') return true;
+    if (filter === 'Freshers') return item.category === 'Freshers' || item.category === 'All';
+    return item.category === 'Returning' || item.category === 'All';
+  });
 
-  const handlePrintSlip = () => {
+  const completedCount = Object.values(completedItems).filter(Boolean).length;
+  const progressPercent = Math.round((completedCount / CHECKLIST_ITEMS.length) * 100);
+
+  const handlePrint = () => {
     window.print();
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-12">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-[#2C180E] via-[#4A2E1B] to-[#3D2317] rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-[#C69C6D]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C69C6D]/20 text-[#E5DDD3] text-xs font-semibold mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#C69C6D]" />
-              <span>Official Academic Clearance Portal</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Interactive Course Registration & Clearance Tracker
-            </h1>
-            <p className="text-[#E5DDD3] text-sm mt-2 max-w-2xl leading-relaxed">
-              Step-by-step guidance for ND & HND students at The Polytechnic, Ibadan. Track your Remita fee payment, credit unit load, medical screening, and physical signature endorsement.
-            </p>
+      <div className="bg-white border border-[#E5DDD3] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2.5 mb-1.5">
+            <CheckSquare className="w-6 h-6 text-[#3D2317]" />
+            <h2 className="text-xl font-bold text-[#2C180E] font-serif">
+              Course Registration &amp; Clearance Tracker
+            </h2>
           </div>
+          <p className="text-xs text-[#5D4037] leading-relaxed max-w-xl">
+            Official step-by-step clearance checklist for {studentProfile?.level || 'ND & HND'} students ({studentProfile?.department || 'The Polytechnic, Ibadan'}). Track Remita payment, course unit validation (18-24 units), and physical signature approvals.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {onOpenEscalate && (
+            <button
+              onClick={() => onOpenEscalate('Course Registration & Clearance Issue')}
+              className="bg-[#FAF7F2] hover:bg-[#F2ECE5] text-[#3D2317] border border-[#E5DDD3] px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span>Advising Help</span>
+            </button>
+          )}
           <button
-            onClick={handlePrintSlip}
-            className="flex items-center gap-2 px-5 py-3 bg-[#C69C6D] hover:bg-[#b0885d] text-[#2C180E] font-bold rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
+            onClick={handlePrint}
+            className="shrink-0 bg-[#3D2317] hover:bg-[#2A160D] text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
           >
             <Printer className="w-4 h-4" />
-            <span>Print Clearance Slip</span>
+            <span>Print Official Slip</span>
           </button>
         </div>
       </div>
 
-      {/* Student Meta & Progress Bar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-[#E5DDD3] shadow-sm lg:col-span-1 flex flex-col justify-between">
+      {/* Progress & Filters */}
+      <div className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <span className="text-xs font-semibold text-[#8D6E63] uppercase tracking-wider">Student Profile</span>
-            <h3 className="text-lg font-bold text-[#2C180E] mt-1">{studentProfile.name}</h3>
-            <div className="mt-3 space-y-2 text-sm text-[#5D4037]">
-              <div className="flex justify-between py-1 border-b border-stone-100">
-                <span className="text-[#8D6E63]">Matric No:</span>
-                <span className="font-mono font-medium">{studentProfile.matricNo}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-stone-100">
-                <span className="text-[#8D6E63]">Level / Program:</span>
-                <span className="font-medium">{studentProfile.level} ({studentProfile.program})</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-stone-100">
-                <span className="text-[#8D6E63]">Faculty:</span>
-                <span className="font-medium">{studentProfile.faculty}</span>
-              </div>
-              <div className="flex justify-between py-1">
-                <span className="text-[#8D6E63]">Department:</span>
-                <span className="font-medium">{studentProfile.department}</span>
-              </div>
+            <div className="text-xs font-bold text-[#6D4C41] uppercase tracking-wider mb-1">
+              Clearance Progress: {completedCount} of {CHECKLIST_ITEMS.length} Completed ({progressPercent}%)
             </div>
-          </div>
-          <div className="mt-6 pt-4 border-t border-stone-100">
-            <button
-              onClick={() => onOpenEscalate('Course Registration & Clearance Issue')}
-              className="w-full py-2.5 px-4 bg-[#F5F0EB] hover:bg-[#E5DDD3] text-[#4A2E1B] font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <HelpCircle className="w-4 h-4 text-[#C69C6D]" />
-              <span>Escalate Clearance Issue to HOD</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-6 border border-[#E5DDD3] shadow-sm lg:col-span-2 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#2C180E]">Clearance Progress Status</h3>
-              <span className="text-sm font-bold px-3 py-1 bg-[#F5F0EB] text-[#4A2E1B] rounded-full">
-                {completedCount} of {totalItems} Completed ({progressPercent}%)
-              </span>
-            </div>
-            
-            <div className="w-full bg-[#F5F0EB] rounded-full h-3.5 mt-4 overflow-hidden">
+            <div className="w-full sm:w-64 h-3 bg-[#FAF7F2] border border-[#E5DDD3] rounded-full overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-[#C69C6D] to-[#8D6E63] h-3.5 rounded-full transition-all duration-500"
+                className="h-full bg-[#3D2317] transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
-              />
+              ></div>
             </div>
-
-            <p className="text-xs text-[#8D6E63] mt-3">
-              {progressPercent === 100 
-                ? '🎉 Congratulations! Your clearance checklist is 100% complete. You are fully cleared for examinations.' 
-                : 'Please complete all mandatory clearance steps and obtain physical signatures from your Course Advisor and HOD.'}
-            </p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-stone-100">
-            <div className="p-3 bg-[#F9F6F0] rounded-xl border border-[#E5DDD3]/60">
-              <span className="text-[11px] font-semibold text-[#8D6E63]">Credit Load Rule</span>
-              <p className="text-xs font-bold text-[#2C180E] mt-0.5">Min 18 – Max 24 Units</p>
-            </div>
-            <div className="p-3 bg-[#F9F6F0] rounded-xl border border-[#E5DDD3]/60">
-              <span className="text-[11px] font-semibold text-[#8D6E63]">Portal Status</span>
-              <p className="text-xs font-bold text-emerald-700 mt-0.5">Remita Active</p>
-            </div>
-            <div className="p-3 bg-[#F9F6F0] rounded-xl border border-[#E5DDD3]/60">
-              <span className="text-[11px] font-semibold text-[#8D6E63]">Medical Status</span>
-              <p className="text-xs font-bold text-[#8D6E63] mt-0.5">Poly Clinic Verified</p>
-            </div>
+          <div className="flex items-center gap-1.5 text-xs">
+            {(['All', 'Freshers', 'Returning'] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
+                  filter === f
+                    ? 'bg-[#3D2317] text-white shadow-xs'
+                    : 'bg-[#FAF7F2] text-[#5D4037] hover:bg-[#EFE8DE] border border-[#E5DDD3]'
+                }`}
+              >
+                {f} Students
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Checklist Items */}
-      <div className="bg-white rounded-2xl border border-[#E5DDD3] shadow-sm overflow-hidden">
-        <div className="px-6 py-4 bg-[#F5F0EB] border-b border-[#E5DDD3] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <CheckSquare className="w-5 h-5 text-[#C69C6D]" />
-            <h3 className="font-bold text-[#2C180E]">Course Registration & Physical Clearance Steps</h3>
-          </div>
-          <span className="text-xs text-[#6D4C41] font-medium">Click checkbox to toggle status</span>
-        </div>
-
-        <div className="divide-y divide-[#E5DDD3]/60">
-          {CHECKLIST_ITEMS.map((item, index) => {
-            const isDone = !!completedItems[item.id];
-            return (
-              <div 
-                key={item.id}
-                onClick={() => toggleItem(item.id)}
-                className={`p-6 transition-colors hover:bg-[#F9F6F0] cursor-pointer flex items-start gap-4 ${
-                  isDone ? 'bg-[#F9F6F0]/50' : 'bg-white'
-                }`}
-              >
-                <div className="mt-1 shrink-0">
-                  {isDone ? (
-                    <CheckCircle2 className="w-6 h-6 text-emerald-600 fill-emerald-50" />
-                  ) : (
-                    <Square className="w-6 h-6 text-stone-300" />
-                  )}
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2.5 py-0.5 bg-[#E5DDD3] text-[#4A2E1B] text-[11px] font-bold rounded-md">
-                      Step {index + 1} · {item.category}
+      {/* Checklist Grid */}
+      <div className="space-y-3">
+        {filteredItems.map((item, idx) => {
+          const isDone = !!completedItems[item.id];
+          return (
+            <div
+              key={item.id}
+              onClick={() => toggleItem(item.id)}
+              className={`bg-white border rounded-2xl p-4 sm:p-5 transition-all cursor-pointer flex items-start gap-4 shadow-xs ${
+                isDone 
+                  ? 'border-[#C69C6D] bg-[#FAF7F2]/60' 
+                  : 'border-[#E5DDD3] hover:border-[#C69C6D]'
+              }`}
+            >
+              <div className="pt-0.5 text-[#3D2317]">
+                {isDone ? (
+                  <CheckCircle2 className="w-6 h-6 text-[#3D2317] fill-[#FAF7F2]" />
+                ) : (
+                  <Square className="w-6 h-6 text-[#8D6E63]" />
+                )}
+              </div>
+              <div className="flex-1 space-y-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <h3 className={`font-bold text-sm ${isDone ? 'line-through text-[#6D4C41]' : 'text-[#2C180E]'}`}>
+                    {idx + 1}. {item.title}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#FAF7F2] text-[#5D4037] border border-[#E5DDD3]">
+                      {item.department}
                     </span>
-                    {item.isMandatory && (
-                      <span className="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold rounded">
+                    {item.mandatory && (
+                      <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                         Mandatory
                       </span>
                     )}
                   </div>
-                  <h4 className={`text-base font-bold mt-1.5 ${isDone ? 'text-stone-500 line-through' : 'text-[#2C180E]'}`}>
-                    {item.title}
-                  </h4>
-                  <p className="text-sm text-[#6D4C41] mt-1 leading-relaxed">
-                    {item.description}
-                  </p>
-                  <div className="flex items-center gap-2 mt-3 text-xs text-[#8D6E63] font-medium">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#C69C6D]" />
-                    <span>Policy Reference: {item.policy}</span>
-                  </div>
                 </div>
+                <p className="text-xs text-[#5D4037] leading-relaxed">
+                  {item.description}
+                </p>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Official Signoff Card */}
-      <div className="bg-[#F5F0EB] rounded-2xl p-6 border border-[#E5DDD3] shadow-sm">
-        <h3 className="text-base font-bold text-[#2C180E] mb-3">Physical Endorsement Sign-Off Table</h3>
-        <p className="text-xs text-[#6D4C41] mb-4">
-          After printing your 4 colored copies of the course form, obtain official signatures from the following officers in order:
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-[#E5DDD3]">
-            <span className="text-[11px] font-bold text-[#8D6E63] uppercase">1. Course Advisor</span>
-            <p className="text-sm font-bold text-[#2C180E] mt-1">Prerequisite & Credit Load Verification</p>
-            <span className="inline-block mt-3 text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-medium">Signature Required</span>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-[#E5DDD3]">
-            <span className="text-[11px] font-bold text-[#8D6E63] uppercase">2. Head of Department (HOD)</span>
-            <p className="text-sm font-bold text-[#2C180E] mt-1">Departmental Stamp & Approval</p>
-            <span className="inline-block mt-3 text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-medium">Signature Required</span>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-[#E5DDD3]">
-            <span className="text-[11px] font-bold text-[#8D6E63] uppercase">3. Faculty Officer</span>
-            <p className="text-sm font-bold text-[#2C180E] mt-1">Final Faculty Clearance Stamp</p>
-            <span className="inline-block mt-3 text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-medium">Signature Required</span>
-          </div>
+      {/* Footer Info */}
+      <div className="bg-[#FAF7F2] border border-[#E5DDD3] rounded-2xl p-4 text-xs text-[#5D4037] space-y-2">
+        <div className="flex items-center gap-2 font-bold text-[#3D2317]">
+          <ShieldCheck className="w-4 h-4 text-[#C69C6D]" />
+          <span>Official Poly Ibadan Regulation Note</span>
         </div>
+        <p className="leading-relaxed">
+          Course registration deadline is strictly enforced two weeks after resumption. Ensure all four colored copies are duly signed before submitting to your departmental officer. For unit load issues (minimum 18, maximum 24 units), visit your Course Advisor or MIS.
+        </p>
       </div>
     </div>
   );
