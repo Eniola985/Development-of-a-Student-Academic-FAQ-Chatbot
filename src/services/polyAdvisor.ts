@@ -5,8 +5,12 @@ import {
   VERIFIED_FAQS,
   ACADEMIC_CALENDAR_EVENTS,
   CAMPUS_OFFICES,
-  NBTE_GRADING_SCALE
+  NBTE_GRADING_SCALE,
+  BOOK_LOCATIONS,
+  CAMPUS_FACILITIES
 } from '../data/polyIbadanData';
+
+
 
 // Initialize Gemini SDK with telemetry header if key is available
 function getGeminiClient() {
@@ -50,37 +54,39 @@ ${studentContext}
 
 Institutional Knowledge & Campus Guide:
 1. Campus Geography & Locations:
-   - North Campus (Sango-Eleyele axis): Houses the Faculty of Science (Computer Science, SLT, Statistics, Geology, Chemistry, Physics), Faculty of Engineering (Electrical, Mechanical, Civil, Computer Engineering), Faculty of Environmental Studies (Architecture, Urban & Regional Planning, Estate Management, Quantity Surveying, Building Technology), the ICT/MIS Directorate (portal issues & biometric capture), and the Sports Complex.
-   - South Campus (Near Apete gate): Houses the Faculty of Business and Communication Studies (FBCS - Mass Communication, Business Administration, Marketing, OTM, Public Administration) and Faculty of Financial Management Studies (FFMS - Accountancy, Banking & Finance, Insurance).
-   - Middle Campus (Central Axis): Houses the Central Administrative Block (Rector's & Registrar's offices), Directorate of Student Affairs (DSA), Poly Clinic / Medical Centre (24/7 health services), Central Library, and Bursary Department.
-2. Academic System:
+   - North Campus (Sango-Eleyele axis): Houses the Faculty of Science (Computer Science, SLT, Statistics, Geology, Chemistry, Physics), Faculty of Engineering (Electrical, Mechanical, Civil, Computer Engineering), Faculty of Environmental Studies (Architecture, Urban & Regional Planning, Estate Management, Quantity Surveying, Building Technology), the ICT/MIS Directorate (portal issues & biometric capture), Assembly Hall, Works & Maintenance, and the Sports Complex.
+   - South Campus (Near Apete gate): Houses the Faculty of Business and Communication Studies (FBCS - Mass Communication, Business Administration, Marketing, OTM, Public Administration) and Faculty of Financial Management Studies (FFMS - Accountancy, Banking & Finance, Insurance), plus Ramat Hall.
+   - Middle Campus (Central Axis): Houses the Central Administrative Block (Rector's & Registrar's offices), Directorate of Student Affairs (DSA), Poly Clinic / Medical Centre (24/7 health services), Central Library, 1000-Seater Lecture Theatre, Wema Bank, Poly Microfinance Bank, and Bursary Department.
+2. Where to Purchase Books, Manuals & Academic Supplies:
+   - Poly Ibadan Official Bookshop: Middle Campus adjacent to Central Library & Bursary. Supplies official GNS manuals (GNS 101 Use of English, GNS 102 Citizenship, GNS 201 Entrepreneurship), statutory matriculation gowns/hoods, official examination answer booklets, and institution-authorized textbooks.
+   - Departmental Associations Secretariats & Course Reps: Located inside each faculty (e.g. NACOS for Computer Science at Faculty of Science ground floor; NESA for Engineering near workshops; NAMCOS for Mass Comm at FBCS; NABAMS for Business Admin; NSA for SLT). They distribute lecturer-approved practical manuals, lab workbooks, and departmental handbooks.
+   - North Campus Commercial Hub & Printing Arcade: Behind Faculty of Science and near Engineering workshops/North Gate. Sells engineering drawing sheets (A3/A2), grid pads, past questions (PQs), slide printouts, spiral binding, and hardcover project binding.
+   - South Campus Commercial Shopping Alley: Between FBCS and FFMS blocks. Stocks business/finance study packs, seminar binding, past questions, and stationery.
+   - Middle Campus Post Office & Unity Hall Alley: Document photocopying, lamination, red markers, stamps, express passport photos for clearance.
+   - Off-Campus Bookstores at Sango Main Gate: Extensive selection of university/polytechnic textbooks, engineering drawing instruments (T-squares, drawing boards, metric scale rules, set squares), Casio scientific calculators (fx-991ES Plus / fx-991EX), and white laboratory coats.
+   - Apete Gate Market: General stationery, second-hand books, past questions for students staying in Apete/Awotan.
+3. Food, Banking & Student Facilities:
+   - Dining / Cafeterias: Student Union Building (SUB) Cafeteria at Middle Campus (budget-friendly student meals), North Campus Bukateria (behind Faculty of Science), FFMS Buka at South Campus, and Unity Hall Food Village.
+   - Banking & ATMs: Wema Bank on-campus branch (Middle Campus near Admin), Poly Ibadan Microfinance Bank (Middle Campus), 24/7 ATM galleries at Wema Bank and Sango Gate.
+   - Healthcare: Poly Clinic / Medical Centre at Middle Campus (open 24/7, emergency ambulance, covered by TISHIP health insurance).
+4. Academic System & NBTE 4.0 Grading:
    - Poly Ibadan runs two semesters per academic session: Harmattan Semester (1st) and Rain Semester (2nd).
    - Programs: National Diploma (ND I & ND II) and Higher National Diploma (HND I & HND II) in Full-Time, Daily Part-Time (DPP), and Part-Time (CEC).
-3. NBTE 4.0 Grading System:
-   - A: 75-100% (4.00) Distinction
-   - AB: 70-74% (3.50) Distinction
-   - B: 65-69% (3.25) Upper Credit
-   - BC: 60-64% (3.00) Upper Credit
-   - C: 55-59% (2.75) Lower Credit
-   - CD: 50-54% (2.50) Lower Credit
-   - D: 45-49% (2.25) Pass
-   - E: 40-44% (2.00) Pass
-   - F: 0-39% (0.00) Fail
+   - Grading Scale: A (75-100%, 4.00 Distinction), AB (70-74%, 3.50 Distinction), B (65-69%, 3.25 Upper Credit), BC (60-64%, 3.00 Upper Credit), C (55-59%, 2.75 Lower Credit), CD (50-54%, 2.50 Lower Credit), D (45-49%, 2.25 Pass), E (40-44%, 2.00 Pass), F (0-39%, 0.00 Fail).
    - Graduation CGPA: 3.50-4.00 Distinction, 3.00-3.49 Upper Credit, 2.50-2.99 Lower Credit, 2.00-2.49 Pass. CGPA below 2.00 results in Academic Warning / Probation.
-4. Key Academic Policies:
+5. Key Academic Policies:
    - Course Registration: Done on portal.polyibadan.edu.ng. Print 4 copies, signed by Course Advisor, HOD, and Faculty Officer. Normal units: 18 min to 24 max (up to 30 with written HOD approval for carryovers).
    - Carryovers: Failing a core course requires registering it when next offered. Cannot take a course if you failed its prerequisite.
-   - 4-Month SIWES vs 1-Year IT:
-     * 4-Month SIWES: Completed at end of ND 1 for Science, Engineering, and Environmental students.
-     * 1-Year Cognate IT: Mandatory post-ND II work experience before HND admission. Minimum grade: Lower Credit (CGPA >= 2.50). Pass grade (2.00-2.49) requires 2 years IT.
+   - 4-Month SIWES vs 1-Year IT: 4-month SIWES is completed at end of ND 1 for Science, Engineering, and Environmental students. 1-Year Cognate IT is mandatory post-ND II work experience before HND admission (minimum Lower Credit CGPA >= 2.50; Pass grade requires 2 years IT).
    - Examination Eligibility: Requires printed Exam Docket stamped by Faculty Officer, official school fees receipt, and valid student ID card. Minimum 75% lecture attendance.
    - Fees: Validated through Remita on portal.polyibadan.edu.ng. Warn students NEVER to pay cash to unauthorized third parties or POS vendors.
-   - Hostels: Unity Hall, Ramat Hall, and Olori Hall applied via portal balloting.
-5. Response Instructions:
-   - You can answer ANY question about The Polytechnic, Ibadan (campus locations, faculties, departments, courses, lecturers/HOD offices, hostel accommodations, school fees, student portal, clinic services, SUG, library, transportation, security, academic calendars, or exam preparation).
+   - Hostels: Unity Hall (Male), Ramat Hall (Female), and Olori Hall applied via portal balloting.
+6. Response Instructions:
+   - You can answer ANY question about The Polytechnic, Ibadan (book purchasing locations, campus facilities, faculties, departments, courses, lecturers/HOD offices, hostel accommodations, school fees, student portal, clinic services, SUG, library, transportation, security, academic calendars, or exam preparation).
    - Be helpful, conversational, respectful, authoritative, and clear.
    - Use bullet points, bold key terms, and step-by-step guidance.
    - Conclude with 2-3 relevant follow-up questions the student might want to ask next.`;
+
 }
 
 export async function handlePolyAdvisorQuery({
@@ -111,8 +117,8 @@ export async function handlePolyAdvisorQuery({
 
   const ai = getGeminiClient();
 
-  // Multi-model list: gemini-3.8-flash is the active generation model
-  const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-flash-latest'];
+  // Candidate models: start with gemini-3.1-flash-lite (fast & distinct quota pool), then gemini-3.8-flash
+  const CANDIDATE_MODELS = ['gemini-3.1-flash-lite', 'gemini-3.8-flash'];
 
   if (ai) {
     const systemInstruction = buildSystemInstruction(studentProfile);
@@ -125,10 +131,12 @@ export async function handlePolyAdvisorQuery({
 Please provide a helpful, structured, and accurate response tailored to The Polytechnic, Ibadan regulations. Conclude with 2-3 relevant follow-up questions the student might want to ask next.`;
 
     for (const model of CANDIDATE_MODELS) {
+      let timeoutTimer: NodeJS.Timeout | null = null;
       try {
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('AI generation timed out')), 3500)
-        );
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          timeoutTimer = setTimeout(() => reject(new Error('AI generation timed out')), 8000);
+        });
+
         const apiCallPromise = ai.models.generateContent({
           model,
           contents: prompt,
@@ -137,9 +145,11 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
             temperature: 0.7,
           },
         });
-        const response: any = await Promise.race([apiCallPromise, timeoutPromise]);
 
-        if (response.text && response.text.trim()) {
+        const response: any = await Promise.race([apiCallPromise, timeoutPromise]);
+        if (timeoutTimer) clearTimeout(timeoutTimer);
+
+        if (response?.text && response.text.trim()) {
           const replyText = response.text.trim();
 
           // Determine citations
@@ -188,8 +198,14 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
           };
         }
       } catch (err: any) {
-        console.warn(`Model ${model} failed:`, err?.message || err);
-        // Continue to next model in loop
+        if (timeoutTimer) clearTimeout(timeoutTimer);
+        // If quota limit (429 RESOURCE_EXHAUSTED) or timeout is encountered,
+        // break immediately so the app delivers the verified offline institutional knowledge base
+        const errMsg = err?.message || '';
+        const isQuota = err?.status === 429 || errMsg.includes('429') || errMsg.includes('quota') || errMsg.includes('RESOURCE_EXHAUSTED');
+        if (isQuota) {
+          break;
+        }
       }
     }
   }
@@ -254,12 +270,111 @@ Please provide a helpful, structured, and accurate response tailored to The Poly
     };
   }
 
+  // Check book and academic materials purchase queries
+  if (
+    lower.includes('book') ||
+    lower.includes('textbook') ||
+    lower.includes('manual') ||
+    lower.includes('handout') ||
+    lower.includes('purchase') ||
+    lower.includes('buy') ||
+    lower.includes('gns') ||
+    lower.includes('t-square') ||
+    lower.includes('drawing board') ||
+    lower.includes('lab coat') ||
+    lower.includes('calculator') ||
+    lower.includes('past question') ||
+    lower.includes('pq') ||
+    lower.includes('stationery')
+  ) {
+    return {
+      reply: `**Where to Purchase Books, Course Manuals & Academic Supplies at Poly Ibadan**\n\nHere are the designated, authorized locations to purchase books, manuals, and study supplies:\n\n1. **The Polytechnic, Ibadan Official Bookshop (Middle Campus):**\n   - **Location:** Central Administration area, adjacent to the Central Library and Bursary.\n   - **Available:** Official General Studies (GNS 101, GNS 102, GNS 201) manuals, statutory matriculation gowns & hoods, examination answer booklets, and institution-authorized reference books.\n\n2. **Departmental Association Secretariats (Inside Respective Faculties):**\n   - **North Campus:** NACOS (Computer Science) at Faculty of Science ground floor; NESA (Engineering) near the workshop complex; FES (Environmental Studies).\n   - **South Campus:** NAMCOS (Mass Communication) and NABAMS (Business Admin) at FBCS; Accountancy and Banking secretariats at FFMS.\n   - **Available:** Lecturer-approved course compendiums, practical manuals, and departmental handbooks.\n\n3. **Campus Commercial Print & Photocopy Centers:**\n   - **North Campus Print Hub (Behind Faculty of Science / North Gate):** Past examination questions (PQs), A3/A2 drawing sheets, spiral binding, and project hardcovers.\n   - **South Campus Commercial Alley (Between FBCS & FFMS):** Business case study handouts, past questions, and office stationeries.\n   - **Middle Campus Post Office / Unity Hall Alley:** Photocopying, course clearance envelopes, red markers, and passport photographs.\n\n4. **Off-Campus Academic Bookstores (Sango Main Gate Axis):**\n   - Located opposite the Main Gate along Sango-Eleyele road. Best for standard textbooks, engineering drawing instruments (T-squares, set squares, metric scale rulers), Casio scientific calculators (fx-991ES Plus / fx-991EX), and white laboratory coats.`,
+      citations: [
+        'The Polytechnic, Ibadan Bookshop & Academic Planning Guidelines',
+        'Directorate of Student Affairs (DSA) Supplies Advisory'
+      ],
+      suggestedFollowUps: [
+        'Where do I buy engineering drawing tools and white lab coats?',
+        'Where is the Faculty of Science located?',
+        'How do I register courses on the student portal?'
+      ],
+      requiresAdvisingEscalation,
+    };
+  }
+
+  // Check food / cafeteria / dining queries
+  if (
+    lower.includes('food') ||
+    lower.includes('eat') ||
+    lower.includes('cafeteria') ||
+    lower.includes('buka') ||
+    lower.includes('canteen') ||
+    lower.includes('hungry') ||
+    lower.includes('lunch') ||
+    lower.includes('dining')
+  ) {
+    return {
+      reply: `**Where to Eat & Buy Food on Campus**\n\nThe Polytechnic, Ibadan has several certified cafeterias and food centers:\n\n1. **Student Union Building (SUB) Cafeteria (Middle Campus):**\n   - Affordable student meals including jollof rice, fried rice, beans, snacks, pastries, and chilled drinks.\n\n2. **North Campus Bukateria Complex:**\n   - Located directly behind the Faculty of Science lecture theatres. Known for authentic local delicacies, hot amala with ewedu/gbegiri, semo, and assorted meats.\n\n3. **FFMS & FBCS Food Village (South Campus):**\n   - Multiple food kiosks serving hot breakfast, lunch dishes, pastries, and smoothies convenient for business & finance students.\n\n4. **Unity Hall Food Village (North Campus):**\n   - Operates near the Unity Hall male hostel; remains open late in the evening for residential and night-reading students.\n\n5. **Off-Campus Dining (Sango Gate & Apete Gate):**\n   - Wide range of restaurants and quick-service spots outside both major campus gates.`,
+      citations: ['Directorate of Student Affairs (DSA) Food Safety & Hygiene Guidelines'],
+      suggestedFollowUps: [
+        'Where can I buy textbooks and course handouts?',
+        'Where is the Poly Clinic located?',
+        'Where are the banks and ATMs on campus?'
+      ],
+      requiresAdvisingEscalation,
+    };
+  }
+
+  // Check banking / ATM queries
+  if (
+    lower.includes('bank') ||
+    lower.includes('atm') ||
+    lower.includes('cash') ||
+    lower.includes('wema') ||
+    lower.includes('microfinance') ||
+    lower.includes('withdraw') ||
+    (lower.includes('pos') && !lower.includes('post'))
+  ) {
+    return {
+      reply: `**Banking Services & ATM Locations on Campus**\n\n1. **Wema Bank (Poly Ibadan Campus Branch):**\n   - **Location:** Middle Campus, beside the Central Administrative Building.\n   - **Services:** Full commercial banking, Remita fee verification, account opening, teller deposits, and ATM gallery.\n\n2. **The Polytechnic, Ibadan Microfinance Bank:**\n   - **Location:** Middle Campus, adjacent to the Bursary Department.\n   - **Services:** Student account opening, departmental dues clearance, and institution-related payments.\n\n3. **24/7 ATM Galleries:**\n   - Located inside the Wema Bank compound and outside near the Sango Main Gate.\n\n*Important Safety Warning:* Always pay your school fees and acceptance fees directly on the official portal (\`portal.polyibadan.edu.ng\`) via Remita RRR. Do not pay tuition cash to roadside POS agents!`,
+      citations: ['Poly Ibadan Bursary Department & Campus Security Advisory'],
+      suggestedFollowUps: [
+        'Can I pay my school fees in installments?',
+        'How do I complete my course registration on the portal?',
+        'Where is the Directorate of Student Affairs (DSA)?'
+      ],
+      requiresAdvisingEscalation,
+    };
+  }
+
+  // Check lecture halls & examination venues
+  if (
+    lower.includes('1000') ||
+    lower.includes('assembly hall') ||
+    lower.includes('lecture theatre') ||
+    lower.includes('exam hall') ||
+    lower.includes('venue') ||
+    lower.includes('auditorium')
+  ) {
+    return {
+      reply: `**Major Lecture Theatres & Examination Halls at Poly Ibadan**\n\n1. **1000-Seater Lecture Theatre (Middle Campus):**\n   - Large multi-purpose facility used for combined General Studies (GNS) lectures, matriculation orientations, and unified semester examinations.\n\n2. **Assembly Hall (North Campus):**\n   - Situated near the Rector's complex; primary hall for official academic ceremonies, public debates, and faculty examinations.\n\n3. **Faculty of Science Lecture Theatres (LT 1, 2, 3 - North Campus):**\n   - Ground and first floor wings of the Science Complex for Computer Science, SLT, and Maths lectures.\n\n4. **Engineering Large Lecture Block & Workshops (North Campus):**\n   - Located adjacent to Mechanical and Civil engineering departments.\n\n5. **FBCS & FFMS Large Auditoriums (South Campus):**\n   - Host Mass Communication, Business Admin, Accountancy, and Banking & Finance lectures and exam sittings.`,
+      citations: ['Directorate of Academic Planning & Infrastructure Directory'],
+      suggestedFollowUps: [
+        'What documents are needed to enter the exam hall?',
+        'Where can I buy textbooks and drawing tools?',
+        'Where is the Faculty of Science located?'
+      ],
+      requiresAdvisingEscalation,
+    };
+  }
+
   // Fallback: Check Verified FAQs
   const matchedFaq = VERIFIED_FAQS.find(faq =>
     faq.tags.some(tag => lower.includes(tag.toLowerCase())) ||
     lower.includes(faq.category.toLowerCase()) ||
     faq.question.toLowerCase().split(' ').some(word => word.length > 4 && lower.includes(word))
   );
+
 
   if (matchedFaq) {
     return {

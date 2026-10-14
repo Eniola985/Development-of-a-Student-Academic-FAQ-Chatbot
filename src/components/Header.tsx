@@ -1,33 +1,34 @@
 import React from 'react';
 import { 
-  Home,
-  MessageSquare, 
-  BookOpen, 
-  Calculator, 
-  Calendar, 
-  Building2, 
-  CheckSquare,
-  LifeBuoy, 
+  Menu, 
+  MoreVertical,
   User, 
-  Edit3,
-  Download,
-  Smartphone
+  Edit3, 
+  Smartphone, 
+  Radio, 
+  Mic, 
+  Calendar,
+  Sparkles,
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
 import { StudentProfile } from '../types';
 import { PolyIbadanLogo } from './PolyIbadanLogo';
 
 interface HeaderProps {
-  activeTab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'checklist' | 'escalate';
-  setActiveTab: (tab: 'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'checklist' | 'escalate') => void;
+  onToggleSidebar: () => void;
+  isSidebarOpen: boolean;
   studentProfile: StudentProfile;
   onOpenProfileModal: () => void;
+  onOpenVoiceModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  activeTab,
-  setActiveTab,
+  onToggleSidebar,
+  isSidebarOpen,
   studentProfile,
-  onOpenProfileModal
+  onOpenProfileModal,
+  onOpenVoiceModal
 }) => {
   const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
   const [isInstalled, setIsInstalled] = React.useState(false);
@@ -62,41 +63,84 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  // Format date like screenshot: "Wed Oct 14 2026"
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(new Date());
+
   return (
-    <header className="bg-[#3D2317] text-white shadow-md border-b border-[#543322] sticky top-0 z-40">
-      {/* Top Banner with Institution Identity */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between py-3 gap-3">
-          {/* Logo & Institution Branding - Clickable to Home */}
-          <div 
-            onClick={() => setActiveTab('home')}
-            className="flex items-center space-x-3.5 text-center md:text-left cursor-pointer group"
-          >
-            <PolyIbadanLogo size={52} className="shadow-xs group-hover:scale-105 transition-transform" />
-            <div>
-              <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
-                <h1 className="text-xl font-bold tracking-tight text-white font-serif">
-                  The Polytechnic, Ibadan
+    <header className="bg-[#3D2317] text-white shadow-md border-b border-[#543322] sticky top-0 z-30">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          {/* Left section: Hamburger/Three-bar Menu button & Welcome Header */}
+          <div className="flex items-center space-x-3.5">
+            {/* Three Dot (⋮) & Menu button to toggle left sidebar drawer */}
+            <button
+              onClick={onToggleSidebar}
+              className="px-2.5 py-2 bg-[#513121] hover:bg-[#68412D] text-white rounded-xl transition-all cursor-pointer shadow-xs border border-[#68412D] flex items-center gap-1 shrink-0 group hover:ring-2 hover:ring-[#C69C6D]/50"
+              title="Open Navigation Menu (Three Dots ⋮)"
+              aria-label="Toggle navigation menu"
+            >
+              <MoreVertical className="w-5 h-5 text-[#C69C6D] group-hover:text-white transition-colors" />
+              <Menu className="w-4 h-4 text-white" />
+              <span className="hidden sm:inline text-xs font-bold text-[#FAF7F2] ml-0.5">Menu</span>
+            </button>
+
+            {/* Welcome greeting with formatted date pill matching the user's screenshot */}
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base sm:text-xl font-black tracking-tight text-white uppercase font-sans truncate">
+                  Welcome {studentProfile.name}
                 </h1>
-                <span className="text-xs bg-[#C69C6D] text-[#2C180E] font-bold px-2 py-0.5 rounded shadow-xs">
-                  Academic FAQ AI
+                <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-md bg-[#1E40AF] text-white text-[11px] font-bold shadow-2xs">
+                  {formattedDate}
                 </span>
               </div>
-              <p className="text-xs text-[#D7CCC8]">
-                Student Advisory Assistant · <span className="italic font-medium">Ise loogun ise</span> (Est. 1970)
-              </p>
+              <div className="flex items-center gap-2 text-xs text-[#D7CCC8] mt-0.5 flex-wrap">
+                <span className="sm:hidden px-2 py-0.5 rounded bg-[#1E40AF] text-white text-[10px] font-bold">
+                  {formattedDate}
+                </span>
+                <span>The Polytechnic, Ibadan</span>
+                <span>•</span>
+                <span className="text-[#C69C6D] font-medium italic">"Ise loogun ise"</span>
+              </div>
             </div>
           </div>
 
-          {/* Action Area: PWA Install & Student Persona */}
-          <div className="flex items-center gap-2 flex-wrap justify-center">
+          {/* Right section: Student Session Details, Live Voice & Persona */}
+          <div className="flex items-center gap-2.5 flex-wrap justify-between md:justify-end">
+            {/* Academic Session & Semester Pill (matching portal card in screenshot) */}
+            <div className="hidden lg:flex flex-col text-right leading-tight bg-[#513121] px-3 py-1.5 rounded-lg border border-[#68412D] text-[11px]">
+              <span className="font-bold text-[#FAF7F2]">
+                Current Session: <span className="text-[#C69C6D]">2025/2026</span>
+              </span>
+              <span className="text-[#D7CCC8]">
+                Harmattan Semester · {studentProfile.level}
+              </span>
+            </div>
+
+            {/* Live Voice Assistant Quick Launcher */}
+            {onOpenVoiceModal && (
+              <button
+                onClick={onOpenVoiceModal}
+                className="px-3 py-1.5 bg-[#FAF7F2] hover:bg-white text-[#3D2317] font-extrabold rounded-lg text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-xs border border-[#C69C6D]"
+                title="Open Voice Assistant"
+              >
+                <Radio className="w-3.5 h-3.5 text-red-600 animate-pulse" />
+                <span className="font-bold">Live Voice 🎙️</span>
+              </button>
+            )}
+
             {/* PWA Install Button */}
             {!isInstalled && (
-              <div className="relative">
+              <div className="relative hidden sm:block">
                 <button
                   onClick={handleInstallClick}
                   className="px-3 py-1.5 bg-[#C69C6D] hover:bg-[#b58b5c] text-[#2C180E] font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-                  title="Install app to your home screen for fast offline access"
+                  title="Install app to your home screen"
                 >
                   <Smartphone className="w-3.5 h-3.5" />
                   <span>Install App</span>
@@ -110,127 +154,30 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
 
-            {/* Student Persona Box */}
-            <div className="flex items-center gap-2 bg-[#513121] px-3.5 py-1.5 rounded-lg border border-[#68412D] text-xs">
-              <User className="w-4 h-4 text-[#D7CCC8] shrink-0" />
-              <div className="flex flex-col text-left leading-tight">
-                <span className="font-semibold text-white truncate max-w-[170px] sm:max-w-xs">
-                  {studentProfile.name} ({studentProfile.level})
+            {/* Student Info Quick Profile Box */}
+            <div className="flex items-center gap-2 bg-[#513121] px-3 py-1.5 rounded-lg border border-[#68412D] text-xs">
+              <div className="w-6 h-6 rounded-full bg-[#FAF7F2] text-[#3D2317] flex items-center justify-center font-bold text-[11px] shrink-0">
+                <User className="w-3.5 h-3.5" />
+              </div>
+              <div className="flex flex-col text-left leading-tight min-w-0">
+                <span className="font-semibold text-white truncate max-w-[140px] sm:max-w-[180px]">
+                  {studentProfile.department}
                 </span>
-                <span className="text-[11px] text-[#D7CCC8] truncate max-w-[170px] sm:max-w-xs">
-                  {studentProfile.department} · {studentProfile.program}
+                <span className="text-[10px] text-[#D7CCC8] truncate font-mono">
+                  {studentProfile.matricNo}
                 </span>
               </div>
               <button
                 onClick={onOpenProfileModal}
-                className="ml-2 px-2.5 py-1 bg-white hover:bg-[#FAF7F2] text-[#3D2317] font-bold rounded text-[11px] flex items-center gap-1 transition-colors cursor-pointer shadow-xs"
-                title="Change your department or level"
+                className="ml-1.5 px-2 py-0.5 bg-white hover:bg-[#FAF7F2] text-[#3D2317] font-bold rounded text-[10px] flex items-center gap-0.5 transition-colors cursor-pointer shadow-xs shrink-0"
+                title="Change Student Profile"
               >
-                <Edit3 className="w-3 h-3" />
-                <span>Change</span>
+                <Edit3 className="w-2.5 h-2.5" />
+                <span>Edit</span>
               </button>
             </div>
           </div>
         </div>
-
-        {/* Navigation Tabs */}
-        <nav className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto py-2 scrollbar-none border-t border-[#543322] text-sm">
-          <button
-            onClick={() => setActiveTab('home')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'home'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <Home className="w-4 h-4" />
-            <span>Home</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('chat')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'chat'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <MessageSquare className="w-4 h-4" />
-            <span>AI Academic Chatbot</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('faqs')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'faqs'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>Verified FAQs</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('checklist')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'checklist'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <CheckSquare className="w-4 h-4" />
-            <span>Course Clearance Checklist</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('calculator')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'calculator'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <Calculator className="w-4 h-4" />
-            <span>NBTE 4.0 CGPA Tool</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('calendar')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'calendar'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <Calendar className="w-4 h-4" />
-            <span>Academic Calendar</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('directory')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'directory'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <Building2 className="w-4 h-4" />
-            <span>Campus Directory</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('escalate')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
-              activeTab === 'escalate'
-                ? 'bg-white text-[#3D2317] font-bold shadow-xs'
-                : 'text-[#EFEBE9] hover:bg-[#513121] hover:text-white'
-            }`}
-          >
-            <LifeBuoy className="w-4 h-4" />
-            <span>Advising Helpdesk</span>
-          </button>
-        </nav>
       </div>
     </header>
   );

@@ -16,7 +16,19 @@ export type FAQCategory =
   | 'Exams & Grading'
   | 'SIWES & 1-Year IT'
   | 'Fees & Payments'
-  | 'Campus Life & Hostels';
+  | 'Campus Life & Hostels'
+  | 'Books & Academic Materials'
+  | 'Campus Locations & Facilities';
+
+export interface BookLocation {
+  name: string;
+  category: 'Official Bookshop' | 'Departmental Secretariat' | 'Campus Commercial Center' | 'Off-Campus Bookstore';
+  campus: 'North Campus' | 'South Campus' | 'Middle Campus' | 'Off-Campus (Gates)';
+  location: string;
+  itemsAvailable: string[];
+  tips: string;
+}
+
 
 export interface FAQItem {
   id: string;

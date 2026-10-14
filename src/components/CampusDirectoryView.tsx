@@ -13,9 +13,14 @@ import {
   Footprints,
   Home,
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  ShoppingBag,
+  Utensils,
+  Landmark,
+  BookOpen
 } from 'lucide-react';
-import { INSTITUTION_INFO, FACULTIES, CAMPUS_OFFICES } from '../data/polyIbadanData';
+import { INSTITUTION_INFO, FACULTIES, CAMPUS_OFFICES, BOOK_LOCATIONS, CAMPUS_FACILITIES } from '../data/polyIbadanData';
+
 
 const CAMPUS_HOSTELS = [
   {
@@ -59,6 +64,17 @@ export const CampusDirectoryView: React.FC = () => {
       fac.departments.some(d => d.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCampus && matchesSearch;
   });
+
+  const filteredBooks = BOOK_LOCATIONS.filter(book => {
+    const matchesCampus = selectedCampus === 'All' || book.campus.toLowerCase().includes(selectedCampus.toLowerCase().replace(' campus', ''));
+    const matchesSearch = !searchQuery.trim() ||
+      book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      book.itemsAvailable.some(item => item.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCampus && matchesSearch;
+  });
+
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-12">
@@ -281,6 +297,92 @@ export const CampusDirectoryView: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Bookstores, Course Manuals & Academic Supplies Section */}
+      <div className="space-y-3 pt-4 border-t border-[#E5DDD3]">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-[#3D2317] font-serif flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4 text-[#C69C6D]" />
+              Where to Purchase Books, Course Manuals &amp; Supplies ({filteredBooks.length})
+            </h3>
+            <p className="text-xs text-[#6D4C41]">
+              Designated institutional bookshops, departmental secretariats, and commercial printing hubs
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredBooks.map((book, idx) => (
+            <div key={idx} className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs space-y-3 flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-2 mb-1.5">
+                  <h4 className="font-bold text-sm text-[#2C180E] leading-snug">{book.name}</h4>
+                  <span className="text-[10px] font-bold text-[#3D2317] bg-[#FAF7F2] px-2 py-0.5 rounded border border-[#E5DDD3] shrink-0">
+                    {book.category}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs text-[#5D4037] mb-2.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#C69C6D] shrink-0" />
+                  <span><strong>{book.campus}:</strong> {book.location}</span>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-[#4E342E] bg-[#FCFBF9] p-3 rounded-xl border border-[#F0EAE1]">
+                  <span className="font-bold text-[#3D2317] block text-[11px] uppercase tracking-wide">
+                    Available Academic Items:
+                  </span>
+                  <ul className="space-y-1 text-[11px]">
+                    {book.itemsAvailable.map((item, itemIdx) => (
+                      <li key={itemIdx} className="flex items-start gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-[#3D2317] shrink-0 mt-1.5"></span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#F0EAE1] text-[11px] text-[#6D4C41] flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-[#C69C6D] shrink-0" />
+                <span className="italic">{book.tips}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Campus Essential Facilities (Food, Banks, Lecture Halls) */}
+      <div className="space-y-3 pt-4 border-t border-[#E5DDD3]">
+        <h3 className="text-base font-bold text-[#3D2317] font-serif flex items-center gap-2">
+          <Utensils className="w-4 h-4 text-[#C69C6D]" />
+          Campus Essential Facilities (Food, Banking &amp; Halls)
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {CAMPUS_FACILITIES.map((cat, catIdx) => (
+            <div key={catIdx} className="bg-white border border-[#E5DDD3] rounded-2xl p-5 shadow-xs space-y-3">
+              <h4 className="font-bold text-sm text-[#2C180E] border-b border-[#F0EAE1] pb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#3D2317]"></span>
+                {cat.category}
+              </h4>
+              <ul className="space-y-2.5 text-xs text-[#5D4037]">
+                {cat.facilities.map((fac, fIdx) => (
+                  <li key={fIdx} className="space-y-0.5">
+                    <div className="font-semibold text-[#2C180E]">{fac.name}</div>
+                    <div className="text-[11px] text-[#8D6E63] flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-[#C69C6D]" />
+                      <span>{fac.location}</span>
+                    </div>
+                    <p className="text-[11px] text-[#4E342E] italic">{fac.notes}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
+

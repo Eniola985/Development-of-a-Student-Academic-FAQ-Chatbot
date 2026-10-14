@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { Sidebar, NavTabId } from './components/Sidebar';
 import { LandingPage } from './components/LandingPage';
 import { ChatInterface } from './components/ChatInterface';
 import { KnowledgeBase } from './components/KnowledgeBase';
 import { CGPACalculator } from './components/CGPACalculator';
 import { AcademicCalendarView } from './components/AcademicCalendarView';
 import { CampusDirectoryView } from './components/CampusDirectoryView';
+import { RegistrationChecklist } from './components/RegistrationChecklist';
 import { EscalationModal } from './components/EscalationModal';
 import { StudentProfileModal } from './components/StudentProfileModal';
+import { VoiceChatModal } from './components/VoiceChatModal';
 import { StudentProfile } from './types';
 import { INSTITUTION_INFO } from './data/polyIbadanData';
 import { PolyIbadanLogo } from './components/PolyIbadanLogo';
@@ -24,9 +27,12 @@ const DEFAULT_PROFILE: StudentProfile = {
 
 export default function App() {
   // Default to 'home' so first-time visitors see the welcoming Landing Page
-  const [activeTab, setActiveTab] = useState<'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'escalate'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'checklist' | 'escalate'>('home');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   const [isEscalateModalOpen, setIsEscalateModalOpen] = useState(false);
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
   const [escalateInitialSubject, setEscalateInitialSubject] = useState('');
   const [chatInitialQuestion, setChatInitialQuestion] = useState<string | undefined>(undefined);
 
@@ -61,23 +67,45 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F5F0] flex flex-col font-sans text-[#2C180E] antialiased selection:bg-[#C69C6D] selection:text-[#2C180E]">
-      {/* Top Header & Navigation */}
-      <Header
+    <div className="min-h-screen bg-[#F8F5F0] flex font-sans text-[#2C180E] antialiased selection:bg-[#C69C6D] selection:text-[#2C180E]">
+      {/* Left Navigation Sidebar matching official Poly Ibadan student portal */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={(tab) => {
+          if (tab === 'voice') {
+            setIsVoiceModalOpen(true);
+          } else {
+            setActiveTab(tab as any);
+          }
+        }}
         studentProfile={studentProfile}
         onOpenProfileModal={() => setIsProfileModalOpen(true)}
+        onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
       />
 
-      {/* Main Content Workspace */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      {/* Main Right Content Workspace Area */}
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        {/* Top Header with Hamburger Button, Welcome Banner, and Date Pill */}
+        <Header
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          isSidebarOpen={isSidebarOpen}
+          studentProfile={studentProfile}
+          onOpenProfileModal={() => setIsProfileModalOpen(true)}
+          onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
+        />
+
+        {/* Main Content Workspace */}
+        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
         {activeTab === 'home' && (
           <LandingPage
             studentProfile={studentProfile}
             onNavigate={(tab) => setActiveTab(tab)}
             onQuickAsk={handleQuickAsk}
             onOpenProfileModal={() => setIsProfileModalOpen(true)}
+            onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
           />
         )}
 
@@ -88,6 +116,7 @@ export default function App() {
             onOpenFaqsTab={() => setActiveTab('faqs')}
             initialQuestion={chatInitialQuestion}
             onClearInitialQuestion={() => setChatInitialQuestion(undefined)}
+            onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
           />
         )}
 
@@ -109,6 +138,13 @@ export default function App() {
           <CampusDirectoryView />
         )}
 
+        {activeTab === 'checklist' && (
+          <RegistrationChecklist
+            studentProfile={studentProfile}
+            onOpenEscalate={handleOpenEscalateModal}
+          />
+        )}
+
         {activeTab === 'escalate' && (
           <EscalationModal
             studentProfile={studentProfile}
@@ -116,6 +152,7 @@ export default function App() {
           />
         )}
       </main>
+
 
       {/* Student Profile Customizer Modal */}
       <StudentProfileModal
@@ -133,6 +170,15 @@ export default function App() {
           onClose={() => setIsEscalateModalOpen(false)}
         />
       )}
+
+      {/* PolyVoice Interactive Live Voice Assistant Modal */}
+      <VoiceChatModal
+        isOpen={isVoiceModalOpen}
+        onClose={() => setIsVoiceModalOpen(false)}
+        studentProfile={studentProfile}
+        onSendToTextChat={handleQuickAsk}
+      />
+
 
       {/* Institutional Footer */}
       <footer className="bg-white border-t border-[#E5DDD3] mt-auto py-6 px-4 sm:px-6 lg:px-8 text-xs text-[#6D4C41]">
@@ -180,5 +226,7 @@ export default function App() {
         </div>
       </footer>
     </div>
+    </div>
   );
 }
+

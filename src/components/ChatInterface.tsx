@@ -15,7 +15,9 @@ import {
   ShieldAlert,
   Sparkles,
   Mic,
-  MicOff
+  MicOff,
+  Radio,
+  BookOpen
 } from 'lucide-react';
 import { ChatMessage, StudentProfile } from '../types';
 import { 
@@ -33,6 +35,7 @@ interface ChatInterfaceProps {
   onOpenFaqsTab: () => void;
   initialQuestion?: string;
   onClearInitialQuestion?: () => void;
+  onOpenVoiceModal?: () => void;
 }
 
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
@@ -40,8 +43,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onOpenEscalateModal,
   onOpenFaqsTab,
   initialQuestion,
-  onClearInitialQuestion
+  onClearInitialQuestion,
+  onOpenVoiceModal
 }) => {
+
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     return [
       {
@@ -207,14 +212,101 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       ];
       let requiresAdvisingEscalation = false;
 
-      // 1. Check Faculty & Department Locations
-      const facultyMatch = FACULTIES.find(f => 
-        lower.includes(f.name.toLowerCase()) || 
-        lower.includes(f.code.toLowerCase()) ||
-        f.departments.some(d => lower.includes(d.toLowerCase()))
-      );
-
-      if (facultyMatch && (lower.includes('where') || lower.includes('locate') || lower.includes('campus') || lower.includes('address') || lower.includes('find') || lower.includes('science') || lower.includes('engineering') || lower.includes('faculty'))) {
+      // 1. Check Book Purchases & Academic Materials
+      if (
+        lower.includes('book') ||
+        lower.includes('textbook') ||
+        lower.includes('manual') ||
+        lower.includes('handout') ||
+        lower.includes('purchase') ||
+        lower.includes('buy') ||
+        lower.includes('gns') ||
+        lower.includes('t-square') ||
+        lower.includes('drawing board') ||
+        lower.includes('lab coat') ||
+        lower.includes('calculator') ||
+        lower.includes('past question') ||
+        lower.includes('pq') ||
+        lower.includes('stationery')
+      ) {
+        replyText = `**Where to Purchase Books, Course Manuals & Academic Supplies at Poly Ibadan**\n\nHere are the designated, authorized locations to purchase books, manuals, and study supplies:\n\n1. **The Polytechnic, Ibadan Official Bookshop (Middle Campus):**\n   - **Location:** Central Administration area, adjacent to the Central Library and Bursary.\n   - **Available:** Official General Studies (GNS 101, GNS 102, GNS 201) manuals, statutory matriculation gowns & hoods, examination answer booklets, and institution-authorized reference books.\n\n2. **Departmental Association Secretariats (Inside Respective Faculties):**\n   - **North Campus:** NACOS (Computer Science) at Faculty of Science ground floor; NESA (Engineering) near the workshop complex; FES (Environmental Studies).\n   - **South Campus:** NAMCOS (Mass Communication) and NABAMS (Business Admin) at FBCS; Accountancy and Banking secretariats at FFMS.\n   - **Available:** Lecturer-approved course compendiums, practical manuals, and departmental handbooks.\n\n3. **Campus Commercial Print & Photocopy Centers:**\n   - **North Campus Print Hub (Behind Faculty of Science / North Gate):** Past examination questions (PQs), A3/A2 drawing sheets, spiral binding, and project hardcovers.\n   - **South Campus Commercial Alley (Between FBCS & FFMS):** Business case study handouts, past questions, and office stationeries.\n   - **Middle Campus Post Office / Unity Hall Alley:** Photocopying, course clearance envelopes, red markers, and passport photographs.\n\n4. **Off-Campus Academic Bookstores (Sango Main Gate Axis):**\n   - Located opposite the Main Gate along Sango-Eleyele road. Best for standard textbooks, engineering drawing instruments (T-squares, set squares, metric scale rulers), Casio scientific calculators (fx-991ES Plus / fx-991EX), and white laboratory coats.`;
+        citations = [
+          'The Polytechnic, Ibadan Bookshop & Academic Planning Guidelines',
+          'Directorate of Student Affairs (DSA) Supplies Advisory'
+        ];
+        suggestedFollowUps = [
+          'Where do I buy engineering drawing tools and white lab coats?',
+          'Where is the Faculty of Science located?',
+          'How do I register courses on the student portal?'
+        ];
+      }
+      // 2. Check Campus Food & Cafeterias
+      else if (
+        lower.includes('food') ||
+        lower.includes('eat') ||
+        lower.includes('cafeteria') ||
+        lower.includes('buka') ||
+        lower.includes('canteen') ||
+        lower.includes('hungry') ||
+        lower.includes('lunch') ||
+        lower.includes('dining')
+      ) {
+        replyText = `**Where to Eat & Buy Food on Campus**\n\nThe Polytechnic, Ibadan has several certified cafeterias and food centers:\n\n1. **Student Union Building (SUB) Cafeteria (Middle Campus):**\n   - Affordable student meals including jollof rice, fried rice, beans, snacks, pastries, and chilled drinks.\n2. **North Campus Bukateria Complex:**\n   - Located directly behind the Faculty of Science lecture theatres. Known for authentic local delicacies, hot amala with ewedu/gbegiri, semo, and assorted meats.\n3. **FFMS & FBCS Food Village (South Campus):**\n   - Multiple food kiosks serving hot breakfast, lunch dishes, pastries, and smoothies convenient for business & finance students.\n4. **Unity Hall Food Village (North Campus):**\n   - Operates near the Unity Hall male hostel; remains open late into the evening for residential and night-reading students.`;
+        citations = ['Directorate of Student Affairs (DSA) Food Safety & Hygiene Guidelines'];
+        suggestedFollowUps = [
+          'Where can I buy textbooks and course handouts?',
+          'Where is the Poly Clinic located?',
+          'Where are the banks and ATMs on campus?'
+        ];
+      }
+      // 3. Check Banks & ATMs
+      else if (
+        lower.includes('bank') ||
+        lower.includes('atm') ||
+        lower.includes('cash') ||
+        lower.includes('wema') ||
+        lower.includes('microfinance') ||
+        lower.includes('withdraw') ||
+        (lower.includes('pos') && !lower.includes('post'))
+      ) {
+        replyText = `**Banking Services & ATM Locations on Campus**\n\n1. **Wema Bank (Poly Ibadan Campus Branch):**\n   - **Location:** Middle Campus, beside the Central Administrative Building.\n   - **Services:** Full commercial banking, Remita fee verification, account opening, teller deposits, and ATM gallery.\n2. **The Polytechnic, Ibadan Microfinance Bank:**\n   - **Location:** Middle Campus, adjacent to the Bursary Department.\n   - **Services:** Student account opening, departmental dues clearance, and institution-related payments.\n3. **24/7 ATM Galleries:**\n   - Located inside the Wema Bank compound and outside near the Sango Main Gate.\n\n*Safety Warning:* Always pay your school fees and acceptance fees directly on the official portal (portal.polyibadan.edu.ng) via Remita RRR. Do not pay tuition cash to roadside POS agents!`;
+        citations = ['Poly Ibadan Bursary Department & Campus Security Advisory'];
+        suggestedFollowUps = [
+          'Can I pay my school fees in installments?',
+          'How do I complete my course registration on the portal?',
+          'Where is the Directorate of Student Affairs (DSA)?'
+        ];
+      }
+      // 4. Check Lecture Halls & Exam Venues
+      else if (
+        lower.includes('1000') ||
+        lower.includes('assembly hall') ||
+        lower.includes('lecture theatre') ||
+        lower.includes('exam hall') ||
+        lower.includes('venue') ||
+        lower.includes('auditorium')
+      ) {
+        replyText = `**Major Lecture Theatres & Examination Halls at Poly Ibadan**\n\n1. **1000-Seater Lecture Theatre (Middle Campus):** Large multi-purpose facility used for combined General Studies (GNS) lectures, matriculation orientations, and unified semester examinations.\n2. **Assembly Hall (North Campus):** Situated near the Rector's complex; primary hall for official academic ceremonies, public debates, and faculty examinations.\n3. **Faculty of Science Lecture Theatres (LT 1, 2, 3 - North Campus):** Ground and first floor wings of the Science Complex for Computer Science, SLT, and Maths lectures.\n4. **Engineering Large Lecture Block & Workshops (North Campus):** Located adjacent to Mechanical and Civil engineering departments.\n5. **FBCS & FFMS Large Auditoriums (South Campus):** Host Mass Communication, Business Admin, Accountancy, and Banking & Finance lectures.`;
+        citations = ['Directorate of Academic Planning & Infrastructure Directory'];
+        suggestedFollowUps = [
+          'What documents are needed to enter the exam hall?',
+          'Where can I buy textbooks and drawing tools?',
+          'Where is the Faculty of Science located?'
+        ];
+      }
+      // 5. Check Faculty & Department Locations
+      else if (
+        FACULTIES.some(f => 
+          lower.includes(f.name.toLowerCase()) || 
+          lower.includes(f.code.toLowerCase()) ||
+          f.departments.some(d => lower.includes(d.toLowerCase()))
+        ) && (lower.includes('where') || lower.includes('locate') || lower.includes('campus') || lower.includes('address') || lower.includes('find') || lower.includes('science') || lower.includes('engineering') || lower.includes('faculty'))
+      ) {
+        const facultyMatch = FACULTIES.find(f => 
+          lower.includes(f.name.toLowerCase()) || 
+          lower.includes(f.code.toLowerCase()) ||
+          f.departments.some(d => lower.includes(d.toLowerCase()))
+        )!;
         replyText = `**Location of ${facultyMatch.name} (${facultyMatch.code})**\n\nThe **${facultyMatch.name}** is located at the **${facultyMatch.campus}** of The Polytechnic, Ibadan.\n\n- **Campus Zone:** ${facultyMatch.campus} (along the Sango-Eleyele axis)\n- **Departments in this Faculty:**\n${facultyMatch.departments.map(d => `  * ${d}`).join('\n')}\n\n*Directions:* Enter via the main Sango gate. The faculty buildings are prominently positioned with clear directional signposts near the departmental lecture halls. Office hours for HODs and lecturers are Monday to Friday, 8:00 AM – 4:00 PM.`;
         citations = ['The Polytechnic, Ibadan Campus Directorate & Physical Planning Map'];
         suggestedFollowUps = [
@@ -223,7 +315,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           'How do I register courses on the student portal?'
         ];
       }
-      // 2. Check Transit between North and South Campus
+      // 6. Check Transit between North and South Campus
       else if (lower.includes('transit') || lower.includes('shuttle') || (lower.includes('north') && lower.includes('south')) || lower.includes('bus') || lower.includes('keke') || lower.includes('move between')) {
         replyText = `**Transiting Between North Campus and South Campus**\n\nThe Polytechnic, Ibadan operates across two main campus zones situated along the Sango-Eleyele corridor:\n\n1. **Campus Shuttle Buses:** Board licensed internal campus shuttles at the North Campus Central Park (near Faculty of Engineering) or South Campus Park (near FBCS). Fare is typically nominal (₦100 - ₦150).\n2. **Keke Napep (Tricycles):** Constant intra-campus tricycles operate between the Main Sango Gate, Middle Campus (Library/DSA/Clinic), and South Campus (Apete Gate axis).\n3. **Walking Route:** Approximately 10–15 minutes brisk walk along the designated pedestrian walkways.\n\n*Tip:* Always have your Student ID card accessible when moving between campuses during examinations.`;
         citations = ['Poly Ibadan Directorate of Student Affairs Transit Guidelines'];
@@ -233,7 +325,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           'What are the approved fees for hostel accommodation?'
         ];
       }
-      // 3. Check Campus Offices (Clinic, DSA, MIS/ICT, Library, Hostels)
+      // 7. Check Campus Offices (Clinic, DSA, MIS/ICT, Library, Hostels)
       else {
         const officeMatch = CAMPUS_OFFICES.find(o =>
           lower.includes(o.name.toLowerCase()) ||
@@ -258,7 +350,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             'How do I calculate my CGPA on the 4.0 scale?'
           ];
         } else {
-          // 4. Check Verified FAQs
+          // 8. Check Verified FAQs
           const matchedFaq = VERIFIED_FAQS.find(faq =>
             faq.tags.some(tag => lower.includes(tag.toLowerCase())) ||
             lower.includes(faq.category.toLowerCase()) ||
@@ -269,17 +361,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             replyText = `**${matchedFaq.question}**\n\n${matchedFaq.detailedAnswer}\n\n*Official Source:* ${matchedFaq.policyReference}`;
             citations = [matchedFaq.policyReference || 'The Polytechnic, Ibadan Student Handbook'];
             suggestedFollowUps = [
+              'Where can I buy textbooks and GNS manuals?',
               'Where is the Faculty of Science located?',
-              'What are the requirements for HND admission?',
               'How do I calculate my CGPA on the 4.0 scale?'
             ];
           } else {
-            // 5. Universal Helpful Fallback for Any School Inquiry
-            replyText = `Welcome to **The Polytechnic, Ibadan** Student Academic & Campus Guide!\n\nI can assist you with any questions regarding our institution:\n- **Campus & Faculty Locations:** (e.g. *"Where is the Faculty of Science located?"*, *"Where is the Poly Clinic?"*, *"How do I find the ICT Centre?"*)\n- **North ↔ South Campus Transit:** (Shuttles, tricycles, gate routes)\n- **Course Registration & Student Portal:** (\`portal.polyibadan.edu.ng\`, credit units 18–24, 4 colored signed copies)\n- **NBTE 4.0 Grading & CGPA:** (Distinction 3.50+, Upper Credit 3.00+, Lower Credit 2.50+, Pass 2.00+, Probation)\n- **Hostels & Campus Life:** (Unity Hall, Ramat Hall, Olori Hall, SUG, Poly Clinic)\n- **SIWES & 1-Year Cognate IT:** (Mandatory IT for HND admission)\n\nPlease ask any specific question about your department or campus!`;
+            // 9. Universal Helpful Fallback for Any School Inquiry
+            replyText = `Welcome to **The Polytechnic, Ibadan** Student Academic & Campus Guide!\n\nI can assist you with any questions regarding our institution:\n- **Where to Purchase Books & Supplies:** (Poly Bookshop, Departmental Secretariats, North & South Campus Commercial Hubs, Sango Gate)\n- **Campus & Faculty Locations:** (e.g. *"Where is the Faculty of Science located?"*, *"Where is the Poly Clinic?"*, *"How do I find the ICT Centre?"*)\n- **Campus Life, Food & Banks:** (SUB Cafeteria, North Campus Buka, Wema Bank, ATMs)\n- **Course Registration & Student Portal:** (\`portal.polyibadan.edu.ng\`, credit units 18–24, 4 colored signed copies)\n- **NBTE 4.0 Grading & CGPA:** (Distinction 3.50+, Upper Credit 3.00+, Lower Credit 2.50+, Pass 2.00+, Probation)\n- **Hostels & Accommodation:** (Unity Hall, Ramat Hall, Olori Hall, Apete housing)\n- **SIWES & 1-Year Cognate IT:** (Mandatory IT for HND admission)\n\nPlease ask any specific question about your department, books, or campus!`;
             citations = ['The Polytechnic, Ibadan Academic Regulations & Student Handbook'];
           }
         }
       }
+
 
       if (lower.includes('dispute') || lower.includes('missing score') || lower.includes('exam malpractice') || lower.includes('expulsion') || lower.includes('probation')) {
         requiresAdvisingEscalation = true;
@@ -399,12 +492,22 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
 
         <div className="flex items-center space-x-2">
+          {onOpenVoiceModal && (
+            <button
+              onClick={onOpenVoiceModal}
+              className="px-3 py-1 bg-[#3D2317] hover:bg-[#2A160D] text-white text-xs font-bold rounded-lg flex items-center gap-1.5 transition-colors shadow-xs cursor-pointer ring-1 ring-[#C69C6D]/50"
+              title="Launch Live Voice Assistant"
+            >
+              <Radio className="w-3.5 h-3.5 text-[#C69C6D] animate-pulse" />
+              <span>Voice Mode 🎙️</span>
+            </button>
+          )}
           <button
             onClick={onOpenFaqsTab}
             className="text-xs text-[#4A2E1B] hover:text-[#2A170D] font-medium px-2 py-1 rounded hover:bg-[#F2ECE5] flex items-center gap-1 transition-colors cursor-pointer"
           >
             <Bookmark className="w-3.5 h-3.5" />
-            <span>Browse All FAQs</span>
+            <span className="hidden sm:inline">Browse FAQs</span>
           </button>
           <button
             onClick={handleResetChat}
@@ -418,6 +521,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </div>
 
       {/* Messages Scroll Area */}
+
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         {messages.map((message) => {
           const isBot = message.sender === 'bot';
@@ -563,7 +667,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         <span className="text-[11px] font-bold text-[#5D4037] uppercase tracking-wider shrink-0">
           Quick Topics:
         </span>
-        {SUGGESTED_QUESTIONS.slice(0, 4).map((q, idx) => (
+        {SUGGESTED_QUESTIONS.slice(0, 6).map((q, idx) => (
           <button
             key={idx}
             onClick={() => handleSendMessage(q)}
@@ -604,7 +708,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={isListening ? "Listening... Speak your question now" : "Ask about course forms, CGPA grading, carryovers, 1-year IT, fees... (Press Enter to send)"}
+              placeholder={isListening ? "Listening... Speak your question now" : "Ask about where to buy books, campus locations, course forms, CGPA grading, carryovers, fees... (Press Enter)"}
               rows={2}
               className={`w-full resize-none border rounded-xl px-3.5 py-2.5 text-sm text-slate-800 placeholder-[#8D6E63] focus:outline-none transition-all ${
                 isListening 
@@ -627,6 +731,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           >
             {isListening ? <MicOff className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-[#3D2317]" />}
           </button>
+
 
           {/* Send Button */}
           <button

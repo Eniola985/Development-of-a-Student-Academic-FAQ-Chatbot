@@ -15,7 +15,11 @@ import {
   Sparkles,
   ChevronRight,
   School,
-  Users
+  Users,
+  Radio,
+  Mic,
+  MapPin,
+  ShoppingBag
 } from 'lucide-react';
 import { PolyIbadanLogo } from './PolyIbadanLogo';
 import { StudentProfile } from '../types';
@@ -26,14 +30,17 @@ interface LandingPageProps {
   onNavigate: (tab: 'chat' | 'faqs' | 'calculator' | 'calendar' | 'directory' | 'escalate') => void;
   onQuickAsk: (question: string) => void;
   onOpenProfileModal: () => void;
+  onOpenVoiceModal?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   studentProfile,
   onNavigate,
   onQuickAsk,
-  onOpenProfileModal
+  onOpenProfileModal,
+  onOpenVoiceModal
 }) => {
+
   const [heroSearchInput, setHeroSearchInput] = useState('');
 
   const handleHeroSearch = (e: React.FormEvent) => {
@@ -100,6 +107,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Quick CTA Buttons */}
           <div className="flex items-center gap-3 flex-wrap">
+            {onOpenVoiceModal && (
+              <button
+                onClick={onOpenVoiceModal}
+                className="px-5 py-2.5 bg-[#FAF7F2] hover:bg-white text-[#3D2317] border-2 border-[#C69C6D] rounded-xl text-xs sm:text-sm font-extrabold inline-flex items-center gap-2 transition-all cursor-pointer shadow-xs hover:shadow-md"
+              >
+                <Radio className="w-4 h-4 text-red-600 animate-pulse" />
+                <span>Live Voice Assistant 🎙️</span>
+              </button>
+            )}
+
             <button
               onClick={() => onNavigate('chat')}
               className="px-5 py-2.5 bg-[#3D2317] hover:bg-[#2A160D] text-white rounded-xl text-xs sm:text-sm font-bold inline-flex items-center gap-2 transition-colors cursor-pointer shadow-xs"
@@ -124,6 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <span>NBTE 4.0 CGPA Tool</span>
             </button>
           </div>
+
         </div>
 
         {/* Student Active Persona Banner in Hero Footer */}
@@ -296,8 +314,61 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <ArrowRight className="w-3 h-3" />
             </div>
           </div>
+
+          {/* Card 7: PolyVoice Live Assistant */}
+          <div 
+            onClick={() => {
+              if (onOpenVoiceModal) onOpenVoiceModal();
+              else onNavigate('chat');
+            }}
+            className="bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#C69C6D] rounded-2xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#3D2317] text-[#FAF7F2] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Radio className="w-5 h-5 text-[#C69C6D] animate-pulse" />
+              </div>
+              <div className="inline-block px-2 py-0.5 rounded bg-red-100 text-red-800 font-extrabold text-[10px] uppercase mb-1">
+                Voice Powered
+              </div>
+              <h3 className="font-bold text-base text-[#2C180E] mb-1.5 flex items-center justify-between">
+                <span>PolyVoice Assistant</span>
+                <ChevronRight className="w-4 h-4 text-[#8D6E63] group-hover:translate-x-1 transition-transform" />
+              </h3>
+              <p className="text-xs text-[#5D4037] leading-relaxed">
+                Speak directly to PolyAdvisor hands-free! Get spoken audio responses on books, lectures, CGPA, and portal clearance.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#F0EAE1] text-[11px] font-bold text-[#3D2317] flex items-center gap-1">
+              <span>Start Voice Session 🎙️</span>
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+
+          {/* Card 8: Where to Buy Books & Supplies */}
+          <div 
+            onClick={() => onQuickAsk("Where can I buy textbooks, GNS manuals, and course handouts at Poly Ibadan?")}
+            className="bg-white border border-[#E5DDD3] rounded-2xl p-6 shadow-xs hover:border-[#C69C6D] transition-all cursor-pointer group flex flex-col justify-between"
+          >
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] border border-[#E5DDD3] text-[#3D2317] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                <ShoppingBag className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-base text-[#2C180E] mb-1.5 flex items-center justify-between">
+                <span>Books &amp; Academic Supplies</span>
+                <ChevronRight className="w-4 h-4 text-[#8D6E63] group-hover:translate-x-1 transition-transform" />
+              </h3>
+              <p className="text-xs text-[#5D4037] leading-relaxed">
+                Learn where to buy GNS manuals, drawing boards, lab coats, departmental handouts, past questions, and project binding.
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#F0EAE1] text-[11px] font-bold text-[#3D2317] flex items-center gap-1">
+              <span>View Bookstores &amp; Hubs</span>
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
         </div>
       </section>
+
 
       {/* Popular Student Questions Quick Grid */}
       <section className="bg-white border border-[#E5DDD3] rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">

@@ -24,8 +24,11 @@ const CATEGORIES: ('All' | FAQCategory)[] = [
   'Admissions & Clearance',
   'SIWES & 1-Year IT',
   'Fees & Payments',
-  'Campus Life & Hostels'
+  'Campus Life & Hostels',
+  'Books & Academic Materials',
+  'Campus Locations & Facilities'
 ];
+
 
 export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ onAskInChat }) => {
   const [searchQuery, setSearchQuery] = useState('');

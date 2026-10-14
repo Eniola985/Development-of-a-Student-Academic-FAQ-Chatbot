@@ -1,4 +1,4 @@
-import { FAQItem, CalendarEvent } from '../types';
+import { FAQItem, CalendarEvent, BookLocation } from '../types';
 
 export const INSTITUTION_INFO = {
   name: "The Polytechnic, Ibadan",
@@ -201,8 +201,59 @@ export const VERIFIED_FAQS: FAQItem[] = [
     policyReference: "Academic Board Guidelines on Inter-Departmental Transfer",
     tags: ["change of course", "transfer", "academic board", "cut-off"],
     frequentlyAsked: false
+  },
+  {
+    id: "faq-buy-books-materials",
+    category: "Books & Academic Materials",
+    question: "Where can I buy textbooks, GNS manuals, and course handouts at Poly Ibadan?",
+    shortAnswer: "Buy official GNS books and university texts at the Poly Ibadan Bookshop (Middle Campus near Central Library), departmental association secretariats, and Faculty commercial printing hubs.",
+    detailedAnswer: "Authorized locations to purchase academic books and materials:\n1. **The Polytechnic, Ibadan Bookshop:** Located at Middle Campus, adjacent to the Central Library and Bursary. Sells authorized General Studies (GNS 101, GNS 102, GNS 201) manuals, statutory matriculation gowns, notebooks, and standard textbooks.\n2. **Departmental Association Secretariats:** Inside your faculty building (e.g. NACOS for Computer Science at Faculty of Science, NESA for Engineering, NAMCOS for Mass Comm at FBCS, NABAMS for Business Admin). Course executives distribute departmental course compendiums, practical workbooks, and lab guides approved by course lecturers.\n3. **Campus Commercial Print & Photocopy Centers:**\n   - *North Campus Commercial Hub:* Behind Faculty of Science and adjacent to Engineering workshops. Offers past questions (PQs), printed lecture slides, spiral binding, and project hardcovers.\n   - *South Campus Shopping Arcade:* Between FBCS and FFMS blocks. Offers management case studies, past examination questions, and stationery.\n   - *Middle Campus Post Office / Unity Hall Alley:* Photocopiers, document lamination, and project printing.\n4. **Off-Campus Academic Bookstores:** Major book vendors along the Sango Gate main road and Apete Gate market stock comprehensive polytechnic reference textbooks.",
+    policyReference: "Directorate of Academic Affairs & Student Union Book Commission",
+    tags: ["buy books", "textbooks", "gns manuals", "poly bookshop", "course materials", "past questions", "where to buy"],
+    frequentlyAsked: true
+  },
+  {
+    id: "faq-buy-engineering-lab-supplies",
+    category: "Books & Academic Materials",
+    question: "Where do I buy engineering drawing instruments, white lab coats, and workshop gear?",
+    shortAnswer: "Purchase drawing boards and T-squares at Sango Gate bookstores or the North Campus Engineering commercial kiosk; lab coats are available at Faculty of Science kiosks and Poly Clinic pharmacy.",
+    detailedAnswer: "Locations for technical and laboratory equipment:\n1. **Technical Drawing Equipment (T-Squares, Drawing Boards, Set Squares, Metric Scales):** Available at the Engineering Association (NESA) secretariat, the North Campus commercial pavilion near Faculty of Environmental Studies, or registered stationery stores outside the Sango main gate.\n2. **White Laboratory Coats & Dissection Kits:** Required for Science Laboratory Technology (SLT), Chemistry, and Biology practicals. Available at the Faculty of Science commercial store, Poly Clinic Pharmacy, and Sango pharmacy stores.\n3. **Scientific Calculators:** Non-programmable models (e.g. Casio fx-991ES Plus / fx-991EX ClassWiz) permitted in exam halls can be obtained from the Poly Bookshop or certified stores at Sango Gate.\n4. **Safety Boots & Workshop Overalls:** Available at North Campus Mechanical/Civil workshops and vendor stores near the Sango bus stop.",
+    policyReference: "Faculties of Engineering & Science Laboratory Safety Guidelines",
+    tags: ["engineering drawing", "lab coat", "t-square", "calculator", "workshop", "equipment"],
+    frequentlyAsked: true
+  },
+  {
+    id: "faq-campus-food-dining",
+    category: "Campus Life & Hostels",
+    question: "Where can I buy food or eat good meals on North and South Campus?",
+    shortAnswer: "Eat at the SUB Cafeteria (Middle Campus), North Campus Bukateria (near Science/Engineering), FFMS Buka (South Campus), or Unity Hall Food Village.",
+    detailedAnswer: "Key dining and cafeteria spots across the campus:\n1. **Student Union Building (SUB) Cafeteria:** Located at Middle Campus. Offers affordable student meals (jollof rice, beans, amala, semo, snacks, and cold beverages).\n2. **North Campus Bukateria Complex:** Situated behind the Faculty of Science lecture theatres. Popular for affordable local delicacies, swallow, and refreshments.\n3. **FFMS & FBCS Food Village:** Located at South Campus. Multiple food vendors serving breakfast, lunch, pastries, and smoothies.\n4. **Unity Hall Food Kiosks:** Located near Unity Hall (North Campus). Open late into the evening for residents and night-class students.\n5. **Off-Campus Food Hubs:** Numerous eateries and fast food outlets operate just outside the Sango Gate and Apete Gate axis.",
+    policyReference: "Directorate of Student Affairs (DSA) Food & Hygiene Committee",
+    tags: ["food", "cafeteria", "buka", "sub cafeteria", "where to eat", "canteen"],
+    frequentlyAsked: true
+  },
+  {
+    id: "faq-banks-atms-campus",
+    category: "Campus Locations & Facilities",
+    question: "Where are the banks and ATMs located on the Poly Ibadan campus?",
+    shortAnswer: "Wema Bank is located on campus beside the Administrative Block; Poly Ibadan Microfinance Bank is at Middle Campus; ATM galleries are near Central Admin and Sango Gate.",
+    detailedAnswer: "Banking services on campus:\n1. **Wema Bank (Poly Ibadan Branch):** Located on Middle Campus, directly adjacent to the Central Administrative complex. Handles Remita fee validations, teller deposits, and ATM cash withdrawals.\n2. **The Polytechnic, Ibadan Microfinance Bank:** Located at Middle Campus. Provides account services, staff/student salary transactions, and departmental dues payments.\n3. **ATM Galleries:** 24/7 automated teller machines are stationed at Wema Bank premises and near the Sango Main Gate.\n4. **POS Agents:** Certified POS vendors operate at the SUB complex, North Campus commercial hub, and South Campus shopping arcade. *Note: Always pay tuition via the official Remita portal, not third-party cash handlers!*",
+    policyReference: "Bursary Directorate & Campus Security Advisory",
+    tags: ["bank", "atm", "wema bank", "microfinance", "cash", "pos", "remita payment"],
+    frequentlyAsked: true
+  },
+  {
+    id: "faq-lecture-theatres-venues",
+    category: "Campus Locations & Facilities",
+    question: "Where are the major lecture theatres and examination halls located?",
+    shortAnswer: "Major halls include the 1000-Seater Lecture Theatre (Middle Campus), Assembly Hall (North Campus), Science LT 1-3, and FBCS/FFMS Auditoriums (South Campus).",
+    detailedAnswer: "Key academic lecture halls and examination centers:\n1. **1000-Seater Lecture Theatre:** Located at Middle Campus. Used for General Studies (GNS) combined lectures, large matriculation rehearsals, and unified examination sittings.\n2. **Assembly Hall:** Located on North Campus near the Rector's complex. Venue for official academic ceremonies, public lectures, and major exams.\n3. **Faculty of Science Lecture Theatres (LT 1, 2, 3):** Located on North Campus, ground and first floors of the Science Complex.\n4. **Engineering Large Lecture Complex & Mechanical Workshops:** Located on North Campus adjacent to Civil Engineering department.\n5. **FBCS & FFMS Auditoriums:** Located on South Campus. Host Mass Comm, Business Admin, Accountancy, and Banking & Finance lectures.\n6. **Sports Pavilion:** North Campus, utilized for outdoor orientations and physical fitness assessments.",
+    policyReference: "Directorate of Academic Planning Physical Infrastructure Catalog",
+    tags: ["lecture theatre", "1000 seater", "assembly hall", "exam hall", "venues", "locations"],
+    frequentlyAsked: true
   }
 ];
+
 
 export const ACADEMIC_CALENDAR_EVENTS: CalendarEvent[] = [
   {
@@ -326,13 +377,162 @@ export const CAMPUS_OFFICES = [
   }
 ];
 
+export const BOOK_LOCATIONS: BookLocation[] = [
+  {
+    name: "The Polytechnic, Ibadan Official Bookshop",
+    category: "Official Bookshop",
+    campus: "Middle Campus",
+    location: "Central Administration Area, Adjacent to Central Library & Bursary",
+    itemsAvailable: [
+      "Official GNS Textbooks (GNS 101 Use of English, GNS 102 Citizenship, GNS 201 Entrepreneurship)",
+      "Statutory Matriculation Gowns & Hoods",
+      "Official Examination Answer Booklets & Logbooks",
+      "Polytechnic Notebooks, Pens & Institutional Souvenirs"
+    ],
+    tips: "Arrive with your validated Remita payment receipt for statutory textbooks and matriculation materials."
+  },
+  {
+    name: "Departmental Associations Secretariats (Course Reps & HOD Desks)",
+    category: "Departmental Secretariat",
+    campus: "North Campus",
+    location: "Inside Respective Faculty Buildings (NACOS at Science, NESA at Engineering, FES at Environmental)",
+    itemsAvailable: [
+      "Departmental Practical Manuals & Laboratory Workbooks",
+      "Lecturer-Approved Course Compendiums & Handouts",
+      "Departmental Handbooks, By-laws & Student Constitutions",
+      "Past Examination Question Compilations (PQs)"
+    ],
+    tips: "Contact your class course representative or departmental secretary during working hours (9 AM - 3 PM)."
+  },
+  {
+    name: "FBCS & FFMS Association Bookstands",
+    category: "Departmental Secretariat",
+    campus: "South Campus",
+    location: "South Campus Ground Floor (NAMCOS Mass Comm, NABAMS Business Admin, Accountancy Secretariats)",
+    itemsAvailable: [
+      "Mass Communication Studio Guides & Media Manuals",
+      "Financial Accounting & Taxation Practice Workbooks",
+      "Business Management Case Study Handouts",
+      "Departmental Seminar & Project Formatting Guides"
+    ],
+    tips: "Dues receipts are checked when collecting departmental customized course manuals."
+  },
+  {
+    name: "North Campus Commercial Hub & Printing Arcade",
+    category: "Campus Commercial Center",
+    campus: "North Campus",
+    location: "Behind Faculty of Science, Near Mechanical Engineering Workshops & North Gate",
+    itemsAvailable: [
+      "Past Questions (PQs) for all ND & HND Engineering & Science Courses",
+      "Technical Drawing Sheets (A3/A2), Grid Pads, Graph Sheets",
+      "Spiral Binding, Hardcover Project Binding & Digital Color Printing",
+      "Slide Prints, Lecture Note Duplications & Stationeries"
+    ],
+    tips: "Ideal for urgent printing, past question packs, and technical drawing paper."
+  },
+  {
+    name: "South Campus Commercial Shopping Alley",
+    category: "Campus Commercial Center",
+    campus: "South Campus",
+    location: "Directly Between FBCS and FFMS Faculty Blocks",
+    itemsAvailable: [
+      "Management & Communication Past Examination Questions",
+      "Project Typing, Proofreading, Lamination & Binding Services",
+      "Staplers, Files, Envelopes & Presentation Folders",
+      "Calculator Batteries, USB Flash Drives & Stationery Supplies"
+    ],
+    tips: "Closest spot for business and finance students between lectures."
+  },
+  {
+    name: "Middle Campus Post Office & Unity Hall Alley",
+    category: "Campus Commercial Center",
+    campus: "Middle Campus",
+    location: "Beside Directorate of Student Affairs (DSA), near Unity Hall",
+    itemsAvailable: [
+      "Official Stamp Duties, Red Markers & Clearance Envelopes",
+      "Express Passport Photographs for Portal Clearance & ID Cards",
+      "Photocopying and Portal Slip Printing",
+      "Scratch Cards, Biometric Registration Printouts"
+    ],
+    tips: "Essential stop during fresh student verification and exam docket stamping."
+  },
+  {
+    name: "Sango Main Gate Academic Bookstores Axis",
+    category: "Off-Campus Bookstore",
+    campus: "Off-Campus (Gates)",
+    location: "Along Sango-Eleyele Highway directly opposite Poly Ibadan Main Gate",
+    itemsAvailable: [
+      "Standard Polytechnic & University Recommended Textbooks",
+      "Engineering Drawing Instruments (T-Squares, Drawing Boards, Set Squares, Compasses)",
+      "Approved Casio Scientific Calculators (fx-991ES Plus / fx-991EX)",
+      "White Laboratory Coats & Dissection Kits for Science Students"
+    ],
+    tips: "Offers wide selection of published textbooks and engineering drafting sets."
+  },
+  {
+    name: "Apete Gate Market & Educational Vendors",
+    category: "Off-Campus Bookstore",
+    campus: "Off-Campus (Gates)",
+    location: "Directly outside South Campus Exit (Apete Gate)",
+    itemsAvailable: [
+      "Past Questions Packs, Exercise Books & General Stationery",
+      "Second-hand Reference Textbooks",
+      "Project Material Duplication Services"
+    ],
+    tips: "Convenient for students residing in Apete, Awotan, and Ajibode axes."
+  }
+];
+
+export const CAMPUS_FACILITIES = [
+  {
+    category: "Dining & Cafeterias",
+    facilities: [
+      { name: "Student Union Building (SUB) Cafeteria", location: "Middle Campus, SUB Complex", notes: "Subsidized hot student meals, snacks, pastries, cold drinks" },
+      { name: "North Campus Bukateria Complex", location: "North Campus, behind Faculty of Science", notes: "Local delicacies, Amala, Rice, Beans, Plantain" },
+      { name: "FFMS & FBCS Food Village", location: "South Campus", notes: "Breakfast dishes, pastries, drinks, quick eats between lectures" },
+      { name: "Unity Hall Food Village", location: "North Campus, Unity Hall perimeter", notes: "Open into the evening for residential & night-reading students" }
+    ]
+  },
+  {
+    category: "Banking & Financial Services",
+    facilities: [
+      { name: "Wema Bank (Poly Ibadan Branch)", location: "Middle Campus, adjacent Administrative Block", notes: "Full commercial banking, Remita tuition payments, ATM gallery" },
+      { name: "The Polytechnic, Ibadan Microfinance Bank", location: "Middle Campus", notes: "Institutional dues, staff/student account services" },
+      { name: "24/7 ATM Galleries", location: "Wema Bank compound & Sango Gate", notes: "Cash withdrawals for all bank ATM cards" }
+    ]
+  },
+  {
+    category: "Lecture Halls & Exam Venues",
+    facilities: [
+      { name: "1000-Seater Lecture Theatre", location: "Middle Campus", notes: "Large combined lectures, GNS exams, major matriculation sittings" },
+      { name: "Assembly Hall", location: "North Campus", notes: "Official ceremonies, large examinations, convocation proceedings" },
+      { name: "Faculty of Science Lecture Theatres (LT 1, 2, 3)", location: "North Campus Science Complex", notes: "Science lectures, practical orientations" },
+      { name: "FBCS / FFMS Large Auditoriums", location: "South Campus", notes: "Business, Communication and Accountancy departmental classes" }
+    ]
+  },
+  {
+    category: "Health, Safety & Worship",
+    facilities: [
+      { name: "Poly Clinic / Medical Centre", location: "Middle Campus", notes: "24/7 Outpatient consultations, emergencies, TISHIP registrations" },
+      { name: "Main Campus Security Base", location: "Middle Campus near Central Admin", notes: "Emergency response, lost-and-found, student safety" },
+      { name: "Poly Central Mosque", location: "Middle Campus / Unity Hall axis", notes: "Daily prayers and Friday Jummah service" },
+      { name: "Chapel of Peace & Joy / CAC Student Fellowship", location: "Middle/North Campus", notes: "Christian fellowships and Sunday services" }
+    ]
+  }
+];
+
 export const SUGGESTED_QUESTIONS = [
+  "Where can I buy textbooks, GNS manuals, and course handouts?",
+  "Where do I buy engineering drawing tools and white lab coats?",
   "How do I register courses on the student portal?",
+  "Where is the Faculty of Science located?",
   "What is the required CGPA for HND admission?",
+  "Where can I buy good food or eat on campus?",
+  "Where are the banks and ATMs on campus?",
   "How is CGPA calculated using the NBTE 4.0 scale?",
-  "What happens if I have a carryover in ND I?",
   "How long is SIWES and when is 1-year IT done?",
   "What documents do I need to enter the exam hall?",
   "Can I pay my school fees in installments?",
   "How do I apply for hostel accommodation?"
 ];
+
