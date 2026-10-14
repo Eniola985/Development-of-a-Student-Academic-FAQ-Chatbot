@@ -101,6 +101,7 @@ export default function App() {
         {activeTab === 'checklist' && (
           <RegistrationChecklist
             studentProfile={studentProfile}
+            onOpenEscalate={handleOpenEscalateModal}
           />
         )}
 
@@ -150,6 +151,7 @@ export default function App() {
               <strong className="text-[#3D2317]">The Polytechnic, Ibadan</strong> · Academic Advisory &amp; Student FAQ System · <span className="italic">Ise loogun ise</span>
             </span>
           </div>
+
           <div className="flex items-center space-x-4 text-[11px] text-[#5D4037] flex-wrap justify-center">
             <button
               onClick={() => setActiveTab('home')}

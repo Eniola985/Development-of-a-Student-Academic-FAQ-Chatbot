@@ -88,6 +88,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Home className="w-4 h-4" />
             <span>Home</span>
           </button>
+
           <button
             onClick={() => setActiveTab('chat')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -99,6 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
             <MessageSquare className="w-4 h-4" />
             <span>AI Academic Chatbot</span>
           </button>
+
           <button
             onClick={() => setActiveTab('faqs')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -110,6 +112,7 @@ export const Header: React.FC<HeaderProps> = ({
             <BookOpen className="w-4 h-4" />
             <span>Verified FAQs</span>
           </button>
+
           <button
             onClick={() => setActiveTab('checklist')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -119,8 +122,9 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             <CheckSquare className="w-4 h-4" />
-            <span>Clearance Checklist</span>
+            <span>Course Clearance Checklist</span>
           </button>
+
           <button
             onClick={() => setActiveTab('calculator')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -132,6 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Calculator className="w-4 h-4" />
             <span>NBTE 4.0 CGPA Tool</span>
           </button>
+
           <button
             onClick={() => setActiveTab('calendar')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -143,6 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Calendar className="w-4 h-4" />
             <span>Academic Calendar</span>
           </button>
+
           <button
             onClick={() => setActiveTab('directory')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
@@ -154,6 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Building2 className="w-4 h-4" />
             <span>Campus Directory</span>
           </button>
+
           <button
             onClick={() => setActiveTab('escalate')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap transition-colors cursor-pointer ${
